@@ -11,6 +11,9 @@ import { useEffect, type ReactNode } from "react";
 
 import appCss from "../styles.css?url";
 import { reportLovableError } from "../lib/lovable-error-reporting";
+import { AuthProvider } from "@/hooks/useAuth";
+import { TooltipProvider } from "@/components/ui/tooltip";
+import { Toaster } from "@/components/ui/sonner";
 
 function NotFoundComponent() {
   return (
@@ -77,10 +80,10 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
     meta: [
       { charSet: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1" },
-      { title: "Clean Base" },
-      { name: "description", content: "Minimal baseline app ready for a GitHub merge." },
-      { property: "og:title", content: "Clean Base" },
-      { property: "og:description", content: "Minimal baseline app ready for a GitHub merge." },
+      { title: "Fira CG" },
+      { name: "description", content: "Fira CG — 2D artist for game dev." },
+      { property: "og:title", content: "Fira CG" },
+      { property: "og:description", content: "Fira CG — 2D artist for game dev." },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
       { name: "twitter:site", content: "@Lovable" },
@@ -118,8 +121,13 @@ function RootComponent() {
 
   return (
     <QueryClientProvider client={queryClient}>
-      {/* Required: nested routes render here. Removing <Outlet /> breaks all child routes. */}
-      <Outlet />
+      <AuthProvider>
+        <TooltipProvider>
+          <Toaster />
+          {/* Required: nested routes render here. Removing <Outlet /> breaks all child routes. */}
+          <Outlet />
+        </TooltipProvider>
+      </AuthProvider>
     </QueryClientProvider>
   );
 }
