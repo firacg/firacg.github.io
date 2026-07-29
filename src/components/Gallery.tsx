@@ -31,7 +31,9 @@ const Gallery = () => {
     <section className="py-20 px-6">
       <div className="max-w-7xl mx-auto">
         <div className="text-center mb-12">
-          <h2 className="text-4xl md:text-5xl font-bold mb-4 text-foreground">Full Portfolio</h2>
+          <h2 className="font-display text-4xl md:text-5xl font-extrabold uppercase tracking-tight mb-4 text-foreground">
+            Full Portfolio
+          </h2>
           <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
             Game art for Plarium and personal work — filtered by project for now, skill tags coming
             as pieces are catalogued
@@ -64,24 +66,24 @@ const Gallery = () => {
           {filteredArtworks.map((artwork) => (
             <div
               key={artwork.id}
-              className="group relative aspect-square overflow-hidden rounded-lg border border-border shadow-glow-subtle hover:shadow-magical transition-all duration-300 cursor-pointer"
+              className="group relative aspect-square overflow-hidden rounded-lg border border-border hover:border-primary transition-colors duration-300 cursor-pointer"
               onClick={() => openLightbox(artwork)}
             >
               <img
                 src={artwork.image}
                 alt={artwork.title}
-                className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
+                className="w-full h-full object-cover transition-transform duration-300 ease-out group-hover:scale-[1.04]"
               />
-              <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
-
-              {/* Hover overlay */}
-              <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                <div className="text-center text-white">
-                  <ZoomIn className="w-8 h-8 mx-auto mb-2" />
-                  <h3 className="font-semibold text-lg capitalize">{artwork.title}</h3>
-                  <p className="text-sm text-gray-300">{artwork.project}</p>
-                </div>
+              {/* Caption overlay — title + category scrim */}
+              <div className="absolute inset-x-0 bottom-0 p-3 pt-8 bg-gradient-to-t from-black/80 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                <h3 className="text-sm font-medium text-white capitalize truncate">
+                  {artwork.title}
+                </h3>
+                <p className="text-xs uppercase tracking-wide text-primary mt-0.5">
+                  {filters.find((f) => f.value === artwork.category)?.label}
+                </p>
               </div>
+              <ZoomIn className="absolute top-3 right-3 w-5 h-5 text-white opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
             </div>
           ))}
         </div>

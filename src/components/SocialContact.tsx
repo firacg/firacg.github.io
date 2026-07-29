@@ -87,7 +87,9 @@ const SocialContact = () => {
     <section className="py-20 px-6">
       <div className="max-w-6xl mx-auto">
         <div className="text-center mb-12">
-          <h2 className="text-4xl md:text-5xl font-bold mb-4 text-foreground">Get in Touch</h2>
+          <h2 className="font-display text-4xl md:text-5xl font-extrabold uppercase tracking-tight mb-4 text-foreground">
+            Get in Touch
+          </h2>
           <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
             Open for commissions — characters, locations, props and items for game dev teams.
           </p>
@@ -103,7 +105,7 @@ const SocialContact = () => {
                   {contact.href ? (
                     <a
                       href={contact.href}
-                      className="flex items-center space-x-4 p-4 rounded-lg border border-border hover:border-primary transition-all duration-300 hover:shadow-glow-subtle"
+                      className="flex items-center space-x-4 p-4 rounded-lg border border-border hover:border-primary transition-all duration-300"
                     >
                       <div className="flex items-center justify-center w-12 h-12 rounded-full bg-primary/10 text-primary group-hover:bg-primary group-hover:text-primary-foreground transition-all duration-300">
                         {contact.icon}
@@ -142,7 +144,7 @@ const SocialContact = () => {
                   href={platform.href}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="group p-6 rounded-lg border border-border hover:border-primary transition-all duration-300 hover:shadow-glow-subtle hover:scale-105"
+                  className="group p-6 rounded-lg border border-border hover:border-primary transition-all duration-300 hover:scale-[1.02]"
                 >
                   <div className="flex items-center space-x-4">
                     <div
@@ -163,7 +165,7 @@ const SocialContact = () => {
 
         {/* Commissions */}
         <div className="mt-16 grid md:grid-cols-2 gap-8">
-          <div className="p-6 rounded-xl bg-card border border-border shadow-deep">
+          <div className="p-6 rounded-xl bg-card border border-border">
             <h3 className="text-xl font-bold text-foreground mb-4">How commissions work</h3>
             <ol className="space-y-2 mb-4">
               {commissionInfo.process.map((step, i) => (
@@ -179,13 +181,15 @@ const SocialContact = () => {
             </p>
           </div>
 
-          <div className="p-6 rounded-xl bg-gradient-magical border border-primary/20 shadow-deep flex flex-col">
-            <h3 className="text-xl font-bold text-primary-foreground mb-2">Request a commission</h3>
-            <p className="text-primary-foreground/80 mb-4 text-sm">
+          <div className="p-6 rounded-xl bg-card border border-primary flex flex-col">
+            <h3 className="font-display text-xl font-extrabold uppercase tracking-tight text-primary mb-2">
+              Request a commission
+            </h3>
+            <p className="text-muted-foreground mb-4 text-sm">
               Pricing is discussed individually after a brief.
             </p>
             <CommissionForm />
-            <div className="flex flex-col sm:flex-row gap-4 mt-6 pt-6 border-t border-primary-foreground/20">
+            <div className="flex flex-col sm:flex-row gap-4 mt-6 pt-6 border-t border-border">
               <a href={payments.kofi} target="_blank" rel="noopener noreferrer" className="flex-1">
                 <Button variant="gold" size="lg" className="w-full">
                   <Coffee className="w-5 h-5 mr-2" />

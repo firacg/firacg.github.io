@@ -9,18 +9,21 @@ const buttonVariants = cva(
   {
     variants: {
       variant: {
-        default: "bg-primary text-primary-foreground shadow hover:bg-primary/90",
-        destructive: "bg-destructive text-destructive-foreground shadow-sm hover:bg-destructive/90",
+        default: "bg-primary text-primary-foreground hover:bg-primary/90",
+        destructive: "bg-destructive text-destructive-foreground hover:bg-destructive/90",
         outline:
-          "border border-input bg-background shadow-sm hover:bg-accent hover:text-accent-foreground",
-        secondary: "bg-secondary text-secondary-foreground shadow-sm hover:bg-secondary/80",
+          "border border-input bg-transparent hover:bg-accent hover:text-accent-foreground",
+        secondary: "bg-secondary text-secondary-foreground hover:bg-secondary/80",
         ghost: "hover:bg-accent hover:text-accent-foreground",
         link: "text-primary underline-offset-4 hover:underline",
+        // Primary CTA — the one accent-filled button, used sparingly (Hero, forms).
         magical:
-          "bg-gradient-magical text-primary-foreground hover:shadow-magical hover:scale-105 border border-primary/20",
+          "bg-primary text-primary-foreground hover:bg-primary/90 hover:scale-[1.02] transition-transform duration-300",
+        // Secondary/neutral action — flat panel, no fill.
         mystic:
-          "bg-mystical-purple text-foreground hover:bg-mystical-purple/80 hover:shadow-glow-subtle border border-primary/30",
-        gold: "bg-gold-accent text-primary-foreground hover:bg-gold-accent/90 hover:shadow-[0_0_20px_oklch(0.881_0.154_90/0.4)]",
+          "bg-transparent border border-border text-foreground hover:border-primary hover:text-primary",
+        // Alias of secondary — kept for existing call sites.
+        gold: "bg-secondary text-secondary-foreground hover:bg-secondary/80",
       },
       size: {
         default: "h-9 px-4 py-2",

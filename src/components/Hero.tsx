@@ -1,57 +1,25 @@
-import { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { ChevronDown } from "lucide-react";
 import { profile } from "@/data/profile";
 import avatar from "@/assets/avatar.jpg";
+import heroArt from "@/assets/before-after.jpg";
 
 const scrollTo = (href: string) => {
   document.querySelector(href)?.scrollIntoView({ behavior: "smooth" });
 };
 
-interface Particle {
-  left: number;
-  top: number;
-  delay: number;
-  duration: number;
-}
-
 const Hero = () => {
-  // Generated client-side only (post-mount) so SSR and the first client
-  // render match exactly — random values in render would otherwise cause a
-  // React hydration mismatch.
-  const [particles, setParticles] = useState<Particle[]>([]);
-
-  useEffect(() => {
-    setParticles(
-      Array.from({ length: 20 }, () => ({
-        left: Math.random() * 100,
-        top: Math.random() * 100,
-        delay: Math.random() * 6,
-        duration: 4 + Math.random() * 4,
-      })),
-    );
-  }, []);
-
   return (
-    <section className="relative min-h-screen flex items-center justify-center overflow-hidden">
-      {/* Animated background */}
-      <div className="absolute inset-0 bg-gradient-mystical opacity-80"></div>
-      <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,hsl(var(--primary)/0.1),transparent_70%)]"></div>
-
-      {/* Floating magical particles */}
-      <div className="absolute inset-0 overflow-hidden">
-        {particles.map((particle, i) => (
-          <div
-            key={i}
-            className="absolute w-2 h-2 bg-primary rounded-full animate-float opacity-30"
-            style={{
-              left: `${particle.left}%`,
-              top: `${particle.top}%`,
-              animationDelay: `${particle.delay}s`,
-              animationDuration: `${particle.duration}s`,
-            }}
-          />
-        ))}
+    <section className="relative min-h-screen flex items-center justify-center overflow-hidden bg-background">
+      {/* Hero art — the one slow cinematic motion on the whole site */}
+      <div className="absolute inset-0">
+        <img
+          src={heroArt}
+          alt=""
+          aria-hidden="true"
+          className="h-full w-full object-cover opacity-30 [animation:hero-zoom_18s_ease-in-out_infinite_alternate]"
+        />
+        <div className="absolute inset-0 bg-background/70" />
       </div>
 
       {/* Main content */}
@@ -60,9 +28,9 @@ const Hero = () => {
           <img
             src={avatar}
             alt={profile.name}
-            className="w-24 h-24 rounded-full object-cover mx-auto mb-6 border-2 border-primary shadow-magical"
+            className="w-24 h-24 rounded-full object-cover mx-auto mb-6 border border-border"
           />
-          <h1 className="text-6xl md:text-8xl font-bold mb-6 bg-gradient-magical bg-clip-text text-transparent">
+          <h1 className="font-display text-5xl md:text-7xl font-extrabold uppercase tracking-tight mb-6 text-foreground">
             {profile.name}
           </h1>
           <p className="text-xl md:text-2xl text-muted-foreground mb-2 max-w-2xl mx-auto">
@@ -72,12 +40,7 @@ const Hero = () => {
             {profile.title} · {profile.location}
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
-            <Button
-              variant="magical"
-              size="lg"
-              className="animate-magical-glow"
-              onClick={() => scrollTo("#gallery")}
-            >
+            <Button variant="magical" size="lg" onClick={() => scrollTo("#gallery")}>
               View Portfolio
             </Button>
             <Button variant="mystic" size="lg" onClick={() => scrollTo("#contact")}>

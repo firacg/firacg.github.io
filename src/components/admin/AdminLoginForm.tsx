@@ -35,7 +35,7 @@ const AdminLoginForm = () => {
     <div className="min-h-screen flex items-center justify-center bg-background px-6">
       <form
         onSubmit={handleSubmit}
-        className="w-full max-w-sm space-y-4 p-8 rounded-xl border border-border bg-card shadow-deep"
+        className="w-full max-w-sm space-y-4 p-8 rounded-xl border border-border bg-card"
       >
         <h1 className="text-2xl font-bold text-center text-foreground mb-2">Вход в CRM</h1>
         <Input

@@ -7,6 +7,8 @@ export const profile = {
   languages: ["English", "Ukrainian", "Russian", "Japanese (elementary)"],
   email: "maboroshi94@gmail.com",
   skills: ["Game Art", "Character Design", "Concept Development"],
+  // Draft — replace with Dariya's own wording before shipping.
+  bio: "Painting is where I started, years at art college before games ever entered the picture. Since 2018 I've worked inside game studios — Nordcurrent, DEFU Games, now GAMETEQ — taking characters from a rough thumbnail to a finished piece ready for production, on titles including Plarium's Throne: Kingdom at War and Vikings: War of Clans. I still sketch by hand before touching a tablet.",
 };
 
 export const social = {

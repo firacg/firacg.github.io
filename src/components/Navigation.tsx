@@ -45,14 +45,14 @@ const Navigation = () => {
     <nav
       className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
         isScrolled
-          ? "bg-background/80 backdrop-blur-md border-b border-border shadow-deep"
+          ? "bg-background/85 backdrop-blur-md border-b border-border"
           : "bg-transparent"
       }`}
     >
       <div className="max-w-7xl mx-auto px-6">
         <div className="flex items-center justify-between h-16">
           {/* Logo */}
-          <div className="text-2xl font-bold bg-gradient-magical bg-clip-text text-transparent">
+          <div className="font-display text-xl font-extrabold uppercase tracking-tight text-foreground">
             Fira CG
           </div>
 
@@ -82,7 +82,7 @@ const Navigation = () => {
 
         {/* Mobile Navigation */}
         {isOpen && (
-          <div className="md:hidden bg-card/95 backdrop-blur-md border border-border rounded-lg mt-2 shadow-deep">
+          <div className="md:hidden bg-card/95 backdrop-blur-md border border-border rounded-lg mt-2">
             <div className="px-4 pt-2 pb-4 space-y-2">
               {navItems.map((item) => (
                 <button

@@ -20,10 +20,12 @@ const BestWorks = () => {
   };
 
   return (
-    <section className="py-20 px-6 bg-gradient-shadow">
+    <section className="py-20 px-6">
       <div className="max-w-7xl mx-auto">
         <div className="text-center mb-12">
-          <h2 className="text-4xl md:text-5xl font-bold mb-4 text-foreground">Featured Work</h2>
+          <h2 className="font-display text-4xl md:text-5xl font-extrabold uppercase tracking-tight mb-4 text-foreground">
+            Featured Work
+          </h2>
           <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
             A curated selection from Plarium's Throne: Kingdom at War and Vikings: War of Clans,
             plus personal work
@@ -32,7 +34,7 @@ const BestWorks = () => {
 
         <div className="relative">
           {/* Main carousel */}
-          <div className="relative overflow-hidden rounded-2xl border border-border shadow-deep">
+          <div className="relative overflow-hidden rounded-2xl border border-border">
             <div
               className="flex transition-transform duration-500 ease-in-out"
               style={{ transform: `translateX(-${currentSlide * 100}%)` }}
@@ -41,17 +43,20 @@ const BestWorks = () => {
                 <div key={work.id} className="w-full flex-shrink-0">
                   <div className="relative aspect-[16/9] md:aspect-[21/9] bg-card">
                     <img src={work.image} alt={work.title} className="w-full h-full object-cover" />
-                    <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent" />
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/10 to-transparent" />
 
-                    {/* Content overlay */}
+                    {/* Case-study content */}
                     <div className="absolute bottom-0 left-0 right-0 p-8 md:p-12">
-                      <div className="max-w-4xl">
-                        <span className="inline-block px-3 py-1 bg-primary/20 text-primary text-sm font-medium rounded-full mb-4 border border-primary/30">
+                      <div className="max-w-2xl">
+                        <span className="inline-block text-xs font-medium uppercase tracking-wide text-primary mb-3">
                           {work.project}
                         </span>
-                        <h3 className="text-3xl md:text-5xl font-bold mb-4 text-white capitalize">
+                        <h3 className="font-display text-2xl md:text-4xl font-extrabold uppercase tracking-tight mb-3 text-white capitalize">
                           {work.title}
                         </h3>
+                        <p className="text-sm md:text-base text-white/80 max-w-lg">
+                          {work.description}
+                        </p>
                       </div>
                     </div>
                   </div>
@@ -86,7 +91,7 @@ const BestWorks = () => {
                 onClick={() => setCurrentSlide(index)}
                 className={`w-3 h-3 rounded-full transition-all duration-300 ${
                   index === currentSlide
-                    ? "bg-primary shadow-magical scale-125"
+                    ? "bg-primary scale-125"
                     : "bg-muted hover:bg-primary/50"
                 }`}
               />

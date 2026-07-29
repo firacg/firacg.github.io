@@ -12,12 +12,37 @@ export interface Work {
   category: WorkCategory;
   image: string;
   featured?: boolean;
+  /** One-line case-study description for the Featured carousel. Falls back
+   *  to the category's generic blurb below when a piece doesn't have its
+   *  own — replace with a specific line per featured piece when ready
+   *  (see design/portfolio-structure.md, open question 1). */
+  description?: string;
 }
 
-export const categories: { value: WorkCategory; label: string; project: string }[] = [
-  { value: "plarium", label: "Plarium", project: "Throne: Kingdom at War / Vikings: War of Clans" },
-  { value: "early", label: "Ранние работы", project: "Личные и ранние проекты" },
-  { value: "pet-projects", label: "Пет-проекты", project: "Фан-арт, стади, эксперименты" },
+export const categories: {
+  value: WorkCategory;
+  label: string;
+  project: string;
+  description: string;
+}[] = [
+  {
+    value: "plarium",
+    label: "Клиентские работы",
+    project: "Throne: Kingdom at War / Vikings: War of Clans",
+    description: "Game art for Plarium's Throne: Kingdom at War and Vikings: War of Clans.",
+  },
+  {
+    value: "early",
+    label: "Ранние работы",
+    project: "Личные и ранние проекты",
+    description: "Early personal and professional work.",
+  },
+  {
+    value: "pet-projects",
+    label: "Личные проекты",
+    project: "Фан-арт, стади, эксперименты",
+    description: "Personal studies, fan art and experiments.",
+  },
 ];
 
 const imagesByCategory: Record<WorkCategory, Record<string, string>> = {
@@ -51,6 +76,7 @@ function loadCategory(category: WorkCategory): Work[] {
       project: meta.project,
       category,
       image,
+      description: meta.description,
     }));
 }
 
