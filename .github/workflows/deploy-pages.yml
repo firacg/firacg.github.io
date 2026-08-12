@@ -49,8 +49,7 @@ jobs:
             sleep 1
           done
           test -s .output/public/index.html
-          sed -i 's|/portfolio/|/github-merge-clean/portfolio/|g; s|/downloads/|/github-merge-clean/downloads/|g; s|/favicon.ico|/github-merge-clean/favicon.ico|g' .output/public/index.html .output/public/assets/*.css .output/public/assets/*.js
-          cp .output/public/index.html .output/public/404.html
+          sed -i 's|/portfolio/|/github-merge-clean/portfolio/|g; s|/downloads/|/github-merge-clean/downloads/|g; s|/favicon.ico|/github-merge-clean/favicon.ico|g' .output/public/index.html .output/public/assets/*.js
           touch .output/public/.nojekyll
 
       - name: Upload Pages artifact

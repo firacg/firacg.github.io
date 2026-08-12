@@ -1,0 +1,50 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Lost page — Fira CG</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@500&family=Manrope:wght@400;600&family=Press+Start+2P&family=Syne:wght@700;800&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      * { box-sizing: border-box; }
+      html, body { margin: 0; min-height: 100%; background: #0d0d0f; color: #f5f4f2; }
+      body { min-height: 100svh; display: grid; overflow: hidden; font-family: Manrope, sans-serif; }
+      main { position: relative; display: grid; grid-template-columns: 1.25fr .75fr; min-height: 100svh; isolation: isolate; }
+      main::before { position: absolute; inset: 0; z-index: -2; content: ""; background: radial-gradient(circle at 82% 45%, #322e39 0, #17171b 28%, #0d0d0f 63%); }
+      main::after { position: absolute; inset: 0; z-index: -1; content: ""; opacity: .16; background-image: linear-gradient(rgba(255,255,255,.08) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,.08) 1px, transparent 1px); background-size: 48px 48px; mask-image: linear-gradient(90deg, transparent, #000); }
+      .copy { align-self: center; padding: clamp(2rem, 6vw, 7rem); }
+      .label { margin: 0 0 1.4rem; color: #c9c5ca; font: 500 .68rem/1 DM Mono, monospace; letter-spacing: .16em; text-transform: uppercase; }
+      h1 { margin: 0; font: 800 clamp(7rem, 22vw, 22rem)/.72 Syne, sans-serif; letter-spacing: -.1em; }
+      h2 { max-width: 680px; margin: 1.4rem 0 0; font: 700 clamp(2rem, 4.4vw, 5rem)/.94 Syne, sans-serif; letter-spacing: -.055em; }
+      .copy > p:last-of-type { max-width: 35rem; margin: 1.5rem 0 0; color: #c9c5ca; line-height: 1.65; }
+      a { display: inline-flex; margin-top: 2.2rem; padding: 1rem 1.25rem; border-radius: 999px; background: #ff0045; color: #fff; font: 500 .68rem/1 DM Mono, monospace; letter-spacing: .08em; text-decoration: none; text-transform: uppercase; transition: transform .2s ease, background .2s ease; }
+      a:hover, a:focus-visible { transform: translateY(-3px); background: #fff; color: #111; outline: none; }
+      .nyanchi { position: relative; display: grid; place-items: center; min-width: 0; }
+      .bubble { position: absolute; top: 18%; left: 50%; width: min(310px, 78%); aspect-ratio: 2.1; display: grid; place-items: center; padding: 1.3rem 2rem 2rem; background: url("/github-merge-clean/portfolio/nyanchi/pixel-speech-frame.svg") center/100% 100% no-repeat; color: #111; font: .56rem/1.7 "Press Start 2P", monospace; text-align: center; text-transform: uppercase; transform: translateX(-50%); }
+      .cat { position: absolute; bottom: 5%; width: min(440px, 95%); image-rendering: pixelated; filter: drop-shadow(0 30px 30px rgba(0,0,0,.5)); animation: float 3.6s ease-in-out infinite alternate; }
+      @keyframes float { to { transform: translateY(-12px); } }
+      @media (max-width: 760px) { main { grid-template-columns: 1fr; } .copy { align-self: start; padding-bottom: 42svh; } h1 { font-size: clamp(7rem, 38vw, 12rem); } .nyanchi { position: absolute; inset: auto 0 0; height: 48svh; } .bubble { top: 0; width: 250px; } .cat { width: 310px; bottom: -12%; } }
+      @media (prefers-reduced-motion: reduce) { .cat { animation: none; } }
+    </style>
+  </head>
+  <body>
+    <main>
+      <section class="copy">
+        <p class="label">Wrong turn / unfinished map</p>
+        <h1>404</h1>
+        <h2>This little world hasn’t been painted yet.</h2>
+        <p>The page may have moved, but the portfolio is still right where Nyanchi left it.</p>
+        <a href="/github-merge-clean/">Back to selected work</a>
+      </section>
+      <div class="nyanchi" aria-hidden="true">
+        <div class="bubble">Nothing here. Let’s go home.</div>
+        <img class="cat" src="/github-merge-clean/portfolio/nyanchi/blink-1.png" alt="" />
+      </div>
+    </main>
+  </body>
+</html>

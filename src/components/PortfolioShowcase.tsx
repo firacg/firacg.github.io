@@ -17,10 +17,10 @@ import { payments, profile, social } from "@/data/profile";
 
 const stages = [
   { src: "/portfolio/raspberry-01-line.png", label: "Line" },
-  { src: "/portfolio/raspberry-02-values.png", label: "Values" },
+  { src: "/portfolio/raspberry-02-values.webp", label: "Values" },
   { src: "/portfolio/raspberry-03-light.png", label: "Volume" },
-  { src: "/portfolio/raspberry-04-texture.png", label: "Texture" },
-  { src: "/portfolio/raspberry-05-final.png", label: "Final" },
+  { src: "/portfolio/raspberry-04-texture.webp", label: "Texture" },
+  { src: "/portfolio/raspberry-05-final.webp", label: "Final" },
 ];
 
 const lineart = [
@@ -57,25 +57,25 @@ const socialPosts = [
     platform: "ArtStation",
     title: "KSOK — full project",
     href: "https://www.artstation.com/artwork/DYk0Wo",
-    src: "/portfolio/ksok2.png",
+    src: "/portfolio/ksok2.webp",
   },
   {
     platform: "Instagram",
     title: "Character art & process",
     href: "https://www.instagram.com/fira_cg/p/Dbp6SL1DO3c/?img_index=2",
-    src: "/portfolio/kcd/flowerfield-final.png",
+    src: "/portfolio/kcd/flowerfield-final.webp",
   },
   {
     platform: "Instagram",
     title: "New work from the studio",
     href: "https://www.instagram.com/fira_cg/p/DTKdMGgDO5Q/",
-    src: "/portfolio/therizina-final.png",
+    src: "/portfolio/therizina-final.webp",
   },
   {
     platform: "Instagram",
     title: "Sketches and studies",
     href: "https://www.instagram.com/p/DG0_z6QMOwp/?img_index=2",
-    src: "/portfolio/sketchbook/madmax-studies.png",
+    src: "/portfolio/sketchbook/madmax-studies.webp",
   },
 ];
 
@@ -85,16 +85,19 @@ function Reveal({ children, className = "" }: { children: React.ReactNode; class
 
 function PortfolioPreloader() {
   const [phase, setPhase] = useState<"loading" | "leaving" | "gone">("loading");
+  const [progress, setProgress] = useState(0);
+  const [loadedCount, setLoadedCount] = useState(0);
+  const [assetCount, setAssetCount] = useState(0);
 
   useEffect(() => {
     const startedAt = performance.now();
     let leaveTimer = 0;
     let removeTimer = 0;
-    let finished = false;
+    let cancelled = false;
 
     const finish = () => {
-      if (finished) return;
-      finished = true;
+      if (cancelled) return;
+      setProgress(100);
       const remaining = Math.max(0, 2350 - (performance.now() - startedAt));
       leaveTimer = window.setTimeout(() => {
         setPhase("leaving");
@@ -102,13 +105,48 @@ function PortfolioPreloader() {
       }, remaining);
     };
 
-    if (document.readyState === "complete") finish();
-    else window.addEventListener("load", finish, { once: true });
+    const base = import.meta.env.BASE_URL;
+    const warmAsset = async (path: string) => {
+      const url = `${base}${path.replace(/^\//, "")}`;
+      const response = await fetch(url, { cache: "force-cache" });
+      if (!response.ok) throw new Error(`Unable to preload ${url}: ${response.status}`);
+      await response.blob();
+    };
 
-    const fallback = window.setTimeout(finish, 3600);
+    const preload = async () => {
+      try {
+        const response = await fetch(`${base}portfolio-manifest.json`, { cache: "no-cache" });
+        if (!response.ok) throw new Error("Portfolio manifest is unavailable");
+        const { assets } = (await response.json()) as { assets: string[] };
+        setAssetCount(assets.length);
+        let completed = 0;
+        const queue = [...assets];
+        const workers = Array.from({ length: Math.min(6, queue.length) }, async () => {
+          while (!cancelled) {
+            const asset = queue.shift();
+            if (!asset) return;
+            try {
+              await warmAsset(asset);
+            } catch (error) {
+              console.warn(error);
+            }
+            completed += 1;
+            if (!cancelled) {
+              setLoadedCount(completed);
+              setProgress(Math.round((completed / assets.length) * 100));
+            }
+          }
+        });
+        await Promise.all(workers);
+      } catch (error) {
+        console.warn(error);
+      }
+      finish();
+    };
+
+    void preload();
     return () => {
-      window.removeEventListener("load", finish);
-      window.clearTimeout(fallback);
+      cancelled = true;
       window.clearTimeout(leaveTimer);
       window.clearTimeout(removeTimer);
     };
@@ -117,7 +155,12 @@ function PortfolioPreloader() {
   if (phase === "gone") return null;
 
   return (
-    <div className={`portfolio-preloader ${phase}`} aria-hidden="true">
+    <div
+      className={`portfolio-preloader ${phase}`}
+      role="status"
+      aria-live="polite"
+      aria-label={`Loading portfolio assets: ${progress}%`}
+    >
       <svg className="paint-logo" viewBox="0 0 760 200">
         <defs>
           <filter id="paint-front" x="-5%" y="-15%" width="110%" height="135%">
@@ -142,6 +185,7 @@ function PortfolioPreloader() {
               className="paint-reveal-wave"
               filter="url(#paint-front)"
               fill="#fff"
+              style={{ transform: `translateY(${158 - progress * 1.58}px)` }}
               d="M-20 48 C55 41 105 55 178 47 C252 39 300 56 376 47 C450 38 510 54 580 46 C648 39 708 52 780 44 L780 220 L-20 220 Z"
             />
           </mask>
@@ -163,7 +207,14 @@ function PortfolioPreloader() {
           </text>
         </g>
       </svg>
-      <p>Painting the final layer</p>
+      <p>
+        Painting the final layer <span>{progress}%</span>
+      </p>
+      {assetCount > 0 && (
+        <small>
+          {loadedCount} / {assetCount} assets ready
+        </small>
+      )}
     </div>
   );
 }
@@ -252,6 +303,7 @@ function ProcessCase() {
 const PortfolioShowcase = () => {
   const [selectedLineart, setSelectedLineart] = useState<(typeof lineart)[number] | null>(null);
   const [nyanchiOpen, setNyanchiOpen] = useState(false);
+  const [nyanchiQuiet, setNyanchiQuiet] = useState(false);
   const [nyanchiFrame, setNyanchiFrame] = useState(1);
   const [nyanchiAction, setNyanchiAction] = useState<
     "idle" | "eat" | "call" | "nose" | "drink" | "play"
@@ -309,6 +361,51 @@ const PortfolioShowcase = () => {
   }, []);
 
   useEffect(() => {
+    if (nyanchiOpen) {
+      setNyanchiQuiet(false);
+      return;
+    }
+
+    const artwork = Array.from(
+      document.querySelectorAll<HTMLElement>(
+        ".feature-media, .kcd-hero, .process-stage, .gaz-hero, .gaz-sequence, .motion-gallery, .object-row, .red-portraits, .lineart-track, .lineart-expanded",
+      ),
+    );
+    let frame = 0;
+
+    const updateNyanchiMode = () => {
+      window.cancelAnimationFrame(frame);
+      frame = window.requestAnimationFrame(() => {
+        const safeZone = {
+          left: window.innerWidth - Math.min(390, window.innerWidth * 0.34),
+          right: window.innerWidth,
+          top: window.innerHeight - Math.min(470, window.innerHeight * 0.58),
+          bottom: window.innerHeight,
+        };
+        const overlapsArtwork = artwork.some((element) => {
+          const rect = element.getBoundingClientRect();
+          return (
+            rect.right > safeZone.left &&
+            rect.left < safeZone.right &&
+            rect.bottom > safeZone.top &&
+            rect.top < safeZone.bottom
+          );
+        });
+        setNyanchiQuiet(overlapsArtwork);
+      });
+    };
+
+    updateNyanchiMode();
+    window.addEventListener("scroll", updateNyanchiMode, { passive: true });
+    window.addEventListener("resize", updateNyanchiMode);
+    return () => {
+      window.cancelAnimationFrame(frame);
+      window.removeEventListener("scroll", updateNyanchiMode);
+      window.removeEventListener("resize", updateNyanchiMode);
+    };
+  }, [nyanchiOpen]);
+
+  useEffect(() => {
     const lengths = { idle: 8, eat: 16, call: 8, nose: 12, drink: 16, play: 12 };
     const animation = window.setInterval(
       () =>
@@ -355,7 +452,7 @@ const PortfolioShowcase = () => {
       <section className="editorial-hero" id="home">
         <img
           className="hero-canvas"
-          src="/portfolio/ksok2.png"
+          src="/portfolio/ksok2.webp"
           alt="Two men resting in a sunlit meadow"
           fetchPriority="high"
         />
@@ -396,19 +493,20 @@ const PortfolioShowcase = () => {
         <div className="manifesto-hologram" aria-hidden="true">
           <div className="manifesto-card">
             <div className="manifesto-card-face manifesto-card-front">
-              <img src="/portfolio/terezina/therezina-card-front.png" alt="" />
+              <img src="/portfolio/terezina/therezina-card-front.webp" alt="" />
             </div>
             <div className="manifesto-card-face manifesto-card-back">
-              <img src="/portfolio/terezina/therezina-card-back.png" alt="" />
+              <img src="/portfolio/terezina/therezina-card-back.webp" alt="" />
             </div>
           </div>
         </div>
         <Reveal>
           <p className="eyebrow">What I do</p>
-          <p className="manifesto-copy">
-            Concept art with a painter’s eye and a production artist’s discipline. I build
-            expressive characters, readable worlds and game-ready visual ideas.
-          </p>
+          <div className="manifesto-copy">
+            <p>Concept art with a painter’s eye.</p>
+            <p>A production artist’s discipline.</p>
+            <p>Expressive characters, readable worlds and game-ready visual ideas.</p>
+          </div>
         </Reveal>
         <div className="capabilities reveal" aria-label="Jump to a discipline">
           <a href="#featured">Character design</a>
@@ -422,7 +520,7 @@ const PortfolioShowcase = () => {
         <article className="feature feature-wide reveal">
           <div className="feature-media">
             <img
-              src="/portfolio/therizina-final.png"
+              src="/portfolio/therizina-final.webp"
               alt="Two colourful therizinosaurs in a jungle"
             />
           </div>
@@ -439,8 +537,8 @@ const PortfolioShowcase = () => {
               <div>
                 <div className="card-blend-float" aria-label="Therizina holographic card">
                   <img
-                    src="/portfolio/terezina/holographic-card.png"
-                    alt="Purple holographic Therizina card rendered from the Blender scene"
+                    src="/portfolio/terezina/therezina-card-front.webp"
+                    alt="Finished Therizina card with holographic light moving across its surface"
                   />
                 </div>
                 <span>Final card</span>
@@ -466,7 +564,7 @@ const PortfolioShowcase = () => {
           </article>
           <article className="feature feature-square reveal">
             <div className="feature-media">
-              <img src="/portfolio/cole-turner.png" alt="Portrait illustration of Cole Turner" />
+              <img src="/portfolio/cole-turner.webp" alt="Portrait illustration of Cole Turner" />
             </div>
             <div className="feature-meta">
               <p>Portrait · Fan art</p>
@@ -489,7 +587,7 @@ const PortfolioShowcase = () => {
         </Reveal>
         <figure className="kcd-hero reveal">
           <img
-            src="/portfolio/kcd/flowerfield-final.png"
+            src="/portfolio/kcd/flowerfield-final.webp"
             alt="Two medieval characters in a flower field"
           />
           <figcaption>Final illustration</figcaption>
@@ -572,8 +670,8 @@ const PortfolioShowcase = () => {
           <h2>Faces under pressure.</h2>
         </div>
         <div className="red-portraits">
-          <img src="/portfolio/henry-2.png" alt="Red monochrome male portrait" />
-          <img src="/portfolio/henry-3.png" alt="Second red monochrome male portrait" />
+          <img src="/portfolio/henry-2.webp" alt="Red monochrome male portrait" />
+          <img src="/portfolio/henry-3.webp" alt="Second red monochrome male portrait" />
         </div>
       </section>
 
@@ -669,7 +767,20 @@ const PortfolioShowcase = () => {
           </h2>
         </Reveal>
         <div className="about-grid reveal">
-          <p>{profile.bio}</p>
+          <div className="about-story">
+            <p>
+              Painting is where I started, with years at art college before games entered the
+              picture.
+            </p>
+            <p>
+              Since 2018 I’ve worked inside Nordcurrent, DEFU Games and GAMETEQ — taking characters
+              from rough thumbnails to production-ready art.
+            </p>
+            <p>
+              Since July 2026 I’ve worked independently as a freelance 2D artist and visual
+              generalist.
+            </p>
+          </div>
           <dl>
             <div>
               <dt>Now</dt>
@@ -746,7 +857,7 @@ const PortfolioShowcase = () => {
       </section>
 
       <section className="support-block section-pad" id="support">
-        <img src="/portfolio/kcd/flowerfield-final.png" alt="Flower field illustration detail" />
+        <img src="/portfolio/kcd/flowerfield-final.webp" alt="Flower field illustration detail" />
         <div className="support-shade" />
         <Reveal className="support-copy">
           <p className="eyebrow">Support independent art</p>
@@ -846,7 +957,7 @@ const PortfolioShowcase = () => {
             </figure>
             <figure className="reveal">
               <img
-                src="/portfolio/closer/ankylosaur-study.png"
+                src="/portfolio/closer/ankylosaur-study.webp"
                 alt="Detailed handmade ankylosaur clay sculpture"
               />
               <figcaption>Armour and texture study</figcaption>
@@ -860,7 +971,7 @@ const PortfolioShowcase = () => {
             </figure>
             <figure className="reveal">
               <img
-                src="/portfolio/closer/triceratops-table.png"
+                src="/portfolio/closer/triceratops-table.webp"
                 alt="Handmade triceratops sculpture displayed on a wooden base"
               />
               <figcaption>Tabletop study</figcaption>
@@ -975,7 +1086,7 @@ const PortfolioShowcase = () => {
             </figure>
             <figure className="reveal">
               <img
-                src="/portfolio/halloween-scene.png"
+                src="/portfolio/halloween-scene.webp"
                 alt="Halloween still life scene with pumpkins, candles and a cat"
               />
               <figcaption>Halloween scene / lighting & materials</figcaption>
@@ -1031,7 +1142,7 @@ const PortfolioShowcase = () => {
       </footer>
 
       <aside
-        className={`nyanchi-helper ${nyanchiOpen ? "is-open" : ""}`}
+        className={`nyanchi-helper ${nyanchiOpen ? "is-open" : ""} ${nyanchiQuiet ? "is-quiet" : ""}`}
         aria-label="Nyanchi contact helper"
       >
         {nyanchiOpen && (
