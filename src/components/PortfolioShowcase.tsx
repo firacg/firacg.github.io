@@ -24,25 +24,25 @@ const stages = [
 ];
 
 const lineart = [
-  ["Line_low-cover.png", "Line_low-1.png", "Lowe"],
-  ["Line_skeggi-cover.png", "Line_skeggi-1.png", "Skeggi"],
-  ["love_vkg-cover.png", "love_vkg-1.png", "Viking story"],
-  ["THR_cat_knight-cover.png", "THR_cat_knight-1.png", "Cat knight"],
-  ["VKG_daynight-cover.png", "VKG_daynight-1.png", "Day & night"],
-  ["VKG_wolf-cover.png", "VKG_wolf-1.png", "The wolf"],
+  ["Line_low-cover.png", "Line_low-1.webp", "Lowe"],
+  ["Line_skeggi-cover.png", "Line_skeggi-1.webp", "Skeggi"],
+  ["love_vkg-cover.png", "love_vkg-1.webp", "Viking story"],
+  ["THR_cat_knight-cover.png", "THR_cat_knight-1.webp", "Cat knight"],
+  ["VKG_daynight-cover.png", "VKG_daynight-1.webp", "Day & night"],
+  ["VKG_wolf-cover.png", "VKG_wolf-1.webp", "The wolf"],
 ];
 
 const sketches = [
   ["portrait-girl.png", "Portrait study"],
-  ["portrait-boy.png", "Value study"],
-  ["madmax-studies.png", "Furiosa studies"],
-  ["gesture-030324.png", "Gesture practice"],
-  ["gesture-170424.png", "Weekly sketching"],
-  ["composition-studies.png", "Composition notes"],
+  ["portrait-boy.webp", "Value study"],
+  ["madmax-studies.webp", "Furiosa studies"],
+  ["gesture-030324.webp", "Gesture practice"],
+  ["gesture-170424.webp", "Weekly sketching"],
+  ["composition-studies.webp", "Composition notes"],
   ["anatomy-hands.png", "Hands / anatomy"],
-  ["anatomy-hand-forms.png", "Hand construction"],
-  ["anatomy-torso.png", "Torso construction"],
-  ["master-studies.png", "Master studies"],
+  ["anatomy-hand-forms.webp", "Hand construction"],
+  ["anatomy-torso.webp", "Torso construction"],
+  ["master-studies.webp", "Master studies"],
 ];
 
 const heroSocials = [
@@ -594,10 +594,10 @@ const PortfolioShowcase = () => {
         </figure>
         <div className="kcd-process">
           {[
-            ["flowerfield-blockout.png", "3D blockout"],
-            ["flowerfield-paintover.png", "Paintover"],
-            ["flowerfield-henry.png", "Character detail / Henry"],
-            ["flowerfield-ptacek.png", "Character detail / Hans"],
+            ["flowerfield-blockout.webp", "3D blockout"],
+            ["flowerfield-paintover.webp", "Paintover"],
+            ["flowerfield-henry.webp", "Character detail / Henry"],
+            ["flowerfield-ptacek.webp", "Character detail / Hans"],
           ].map(([src, title]) => (
             <figure className="reveal" key={src}>
               <img src={`/portfolio/kcd/${src}`} alt={title} />
@@ -989,7 +989,7 @@ const PortfolioShowcase = () => {
             </h2>
           </Reveal>
           <div className="object-row">
-            {["potion-blue.png", "potion-purple.png", "potion-green.png", "potion-red.png"].map(
+            {["potion-blue.webp", "potion-purple.webp", "potion-green.webp", "potion-red.webp"].map(
               (src, index) => (
                 <figure className="object-card reveal" key={src}>
                   <img src={`/portfolio/${src}`} alt={`Fantasy potion concept ${index + 1}`} />

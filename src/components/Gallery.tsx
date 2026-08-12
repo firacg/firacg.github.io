@@ -58,8 +58,7 @@ const Gallery = () => {
         {isLoading && <p className="text-center text-muted-foreground py-12">Загрузка…</p>}
         {!isLoading && filteredArtworks.length === 0 && (
           <p className="text-center text-muted-foreground py-12">
-            Здесь пока пусто — добавьте работы через CRM (/admin) или загрузите изображения в
-            src/assets/works/.
+            Здесь пока пусто — добавьте изображения в src/assets/works/.
           </p>
         )}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">

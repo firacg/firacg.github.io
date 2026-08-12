@@ -11,13 +11,6 @@
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as SitemapDotxmlRouteImport } from './routes/sitemap[.]xml'
-import { Route as AdminIndexRouteImport } from './routes/admin.index'
-import { Route as AdminArticlesRouteImport } from './routes/admin.articles'
-import { Route as AdminCommissionsRouteImport } from './routes/admin.commissions'
-import { Route as AdminLoginRouteImport } from './routes/admin.login'
-import { Route as AdminWorksRouteImport } from './routes/admin.works'
-import { Route as BlogIndexRouteImport } from './routes/blog.index'
-import { Route as BlogSlugRouteImport } from './routes/blog.$slug'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
@@ -29,122 +22,31 @@ const SitemapDotxmlRoute = SitemapDotxmlRouteImport.update({
   path: '/sitemap.xml',
   getParentRoute: () => rootRouteImport,
 } as any)
-const AdminIndexRoute = AdminIndexRouteImport.update({
-  id: '/admin/',
-  path: '/admin/',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const AdminArticlesRoute = AdminArticlesRouteImport.update({
-  id: '/admin/articles',
-  path: '/admin/articles',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const AdminCommissionsRoute = AdminCommissionsRouteImport.update({
-  id: '/admin/commissions',
-  path: '/admin/commissions',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const AdminLoginRoute = AdminLoginRouteImport.update({
-  id: '/admin/login',
-  path: '/admin/login',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const AdminWorksRoute = AdminWorksRouteImport.update({
-  id: '/admin/works',
-  path: '/admin/works',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const BlogIndexRoute = BlogIndexRouteImport.update({
-  id: '/blog/',
-  path: '/blog/',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const BlogSlugRoute = BlogSlugRouteImport.update({
-  id: '/blog/$slug',
-  path: '/blog/$slug',
-  getParentRoute: () => rootRouteImport,
-} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
-  '/admin/articles': typeof AdminArticlesRoute
-  '/admin/commissions': typeof AdminCommissionsRoute
-  '/admin/login': typeof AdminLoginRoute
-  '/admin/works': typeof AdminWorksRoute
-  '/blog/$slug': typeof BlogSlugRoute
-  '/admin/': typeof AdminIndexRoute
-  '/blog/': typeof BlogIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
-  '/admin/articles': typeof AdminArticlesRoute
-  '/admin/commissions': typeof AdminCommissionsRoute
-  '/admin/login': typeof AdminLoginRoute
-  '/admin/works': typeof AdminWorksRoute
-  '/blog/$slug': typeof BlogSlugRoute
-  '/admin': typeof AdminIndexRoute
-  '/blog': typeof BlogIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
-  '/admin/articles': typeof AdminArticlesRoute
-  '/admin/commissions': typeof AdminCommissionsRoute
-  '/admin/login': typeof AdminLoginRoute
-  '/admin/works': typeof AdminWorksRoute
-  '/blog/$slug': typeof BlogSlugRoute
-  '/admin/': typeof AdminIndexRoute
-  '/blog/': typeof BlogIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths:
-    | '/'
-    | '/sitemap.xml'
-    | '/admin/articles'
-    | '/admin/commissions'
-    | '/admin/login'
-    | '/admin/works'
-    | '/blog/$slug'
-    | '/admin/'
-    | '/blog/'
+  fullPaths: '/' | '/sitemap.xml'
   fileRoutesByTo: FileRoutesByTo
-  to:
-    | '/'
-    | '/sitemap.xml'
-    | '/admin/articles'
-    | '/admin/commissions'
-    | '/admin/login'
-    | '/admin/works'
-    | '/blog/$slug'
-    | '/admin'
-    | '/blog'
-  id:
-    | '__root__'
-    | '/'
-    | '/sitemap.xml'
-    | '/admin/articles'
-    | '/admin/commissions'
-    | '/admin/login'
-    | '/admin/works'
-    | '/blog/$slug'
-    | '/admin/'
-    | '/blog/'
+  to: '/' | '/sitemap.xml'
+  id: '__root__' | '/' | '/sitemap.xml'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   SitemapDotxmlRoute: typeof SitemapDotxmlRoute
-  AdminArticlesRoute: typeof AdminArticlesRoute
-  AdminCommissionsRoute: typeof AdminCommissionsRoute
-  AdminLoginRoute: typeof AdminLoginRoute
-  AdminWorksRoute: typeof AdminWorksRoute
-  BlogSlugRoute: typeof BlogSlugRoute
-  AdminIndexRoute: typeof AdminIndexRoute
-  BlogIndexRoute: typeof BlogIndexRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -163,68 +65,12 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof SitemapDotxmlRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/admin/': {
-      id: '/admin/'
-      path: '/admin'
-      fullPath: '/admin/'
-      preLoaderRoute: typeof AdminIndexRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/admin/articles': {
-      id: '/admin/articles'
-      path: '/admin/articles'
-      fullPath: '/admin/articles'
-      preLoaderRoute: typeof AdminArticlesRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/admin/commissions': {
-      id: '/admin/commissions'
-      path: '/admin/commissions'
-      fullPath: '/admin/commissions'
-      preLoaderRoute: typeof AdminCommissionsRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/admin/login': {
-      id: '/admin/login'
-      path: '/admin/login'
-      fullPath: '/admin/login'
-      preLoaderRoute: typeof AdminLoginRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/admin/works': {
-      id: '/admin/works'
-      path: '/admin/works'
-      fullPath: '/admin/works'
-      preLoaderRoute: typeof AdminWorksRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/blog/': {
-      id: '/blog/'
-      path: '/blog'
-      fullPath: '/blog/'
-      preLoaderRoute: typeof BlogIndexRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/blog/$slug': {
-      id: '/blog/$slug'
-      path: '/blog/$slug'
-      fullPath: '/blog/$slug'
-      preLoaderRoute: typeof BlogSlugRouteImport
-      parentRoute: typeof rootRouteImport
-    }
   }
 }
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   SitemapDotxmlRoute: SitemapDotxmlRoute,
-  AdminArticlesRoute: AdminArticlesRoute,
-  AdminCommissionsRoute: AdminCommissionsRoute,
-  AdminLoginRoute: AdminLoginRoute,
-  AdminWorksRoute: AdminWorksRoute,
-  BlogSlugRoute: BlogSlugRoute,
-  AdminIndexRoute: AdminIndexRoute,
-  BlogIndexRoute: BlogIndexRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

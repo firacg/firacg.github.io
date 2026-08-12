@@ -3,9 +3,8 @@
 Companion to [`visual-style.md`](./visual-style.md) (Studio Gallery direction,
 Signal Pink #FF0045 accent). This document maps the structural/UX patterns
 learned from 8 reference studio portfolios onto Fira's actual page and
-component structure. **Visual/structural only — no changes to Supabase
-schema, routes, or CRM logic.** See `firacghandoff/handoff/HANDOFF.md` for
-what must stay functionally untouched.
+component structure. **Visual/structural only.** See
+`firacghandoff/handoff/HANDOFF.md` for the original design context.
 
 Existing route: `src/routes/index.tsx` renders `IndexPage.tsx`, which stacks
 these sections in order: `Navigation` → `Hero` (#home) → `BeforeAfter`
@@ -111,24 +110,8 @@ describes what changes _inside_ each block.
   list (this one is a genuine ordered process, so numbering is warranted,
   unlike decorative "01/02/03" card labels seen on some references).
 
-### Blog (`BlogList.tsx`, `BlogPostView.tsx`)
-
-- Out of scope for the studio-portfolio pattern language (no reference site
-  had a blog) — just inherit the same color/type tokens from
-  `visual-style.md` for consistency (dark canvas, Montserrat headings, Inter
-  body) without adopting gallery-specific patterns (no image grid needed
-  here).
-
-### Admin (`/admin/*`)
-
-- Not part of this visual system — CRM should stay a plain, functional
-  utility UI. Do not apply the gallery/hero treatment there; at most, inherit
-  the base color tokens for visual consistency when the admin is viewed
-  right after the public site.
-
 ## What's intentionally NOT changed
 
-- Supabase schema (`works`, `commission_requests`, `articles`) — untouched.
 - Existing category taxonomy (plarium / early / pet-projects) — kept as the
   filter values; only the filter button's visual state changes.
 - Routing structure and section anchor IDs — kept identical so nothing
