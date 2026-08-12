@@ -2116,10 +2116,10 @@ main > footer {
   pointer-events: none;
 }
 .nyanchi-helper.is-quiet:not(.is-open) .nyanchi-pet {
-  border-radius: 10px;
-  background: rgba(13, 13, 15, 0.78);
-  box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.72);
-  backdrop-filter: blur(8px);
+  border-radius: 0;
+  background: transparent;
+  box-shadow: none;
+  backdrop-filter: none;
 }
 .nyanchi-helper.is-quiet:not(.is-open):hover,
 .nyanchi-helper.is-quiet:not(.is-open):focus-within {
