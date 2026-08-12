@@ -34,7 +34,7 @@ jobs:
         run: npm run build
         env:
           NITRO_PRESET: node-server
-          NITRO_APP_BASE_URL: /github-merge-clean/
+          NITRO_APP_BASE_URL: /
 
       - name: Render the home page
         shell: bash
@@ -43,13 +43,12 @@ jobs:
           SERVER_PID=$!
           trap 'kill $SERVER_PID' EXIT
           for attempt in {1..30}; do
-            if curl --fail --silent http://127.0.0.1:4173/github-merge-clean/ > .output/public/index.html; then
+            if curl --fail --silent http://127.0.0.1:4173/ > .output/public/index.html; then
               break
             fi
             sleep 1
           done
           test -s .output/public/index.html
-          sed -i 's|/portfolio/|/github-merge-clean/portfolio/|g; s|/downloads/|/github-merge-clean/downloads/|g; s|/favicon.ico|/github-merge-clean/favicon.ico|g' .output/public/index.html .output/public/assets/*.js
           touch .output/public/.nojekyll
 
       - name: Upload Pages artifact
