@@ -19,8 +19,8 @@ const stages = [
   { src: "/portfolio/raspberry-01-line.png", label: "Line" },
   { src: "/portfolio/raspberry-02-values.webp", label: "Values" },
   { src: "/portfolio/raspberry-03-light.png", label: "Volume" },
-  { src: "/portfolio/raspberry-04-texture.webp", label: "Texture" },
-  { src: "/portfolio/raspberry-05-final.webp", label: "Final" },
+  { src: "/portfolio/raspberry-04-texture-web.webp", label: "Texture" },
+  { src: "/portfolio/raspberry-05-final-web.webp", label: "Final" },
 ];
 
 const lineart = [
@@ -57,7 +57,7 @@ const socialPosts = [
     platform: "ArtStation",
     title: "KSOK — full project",
     href: "https://www.artstation.com/artwork/DYk0Wo",
-    src: "/portfolio/ksok2.webp",
+    src: "/portfolio/ksok2-web.webp",
   },
   {
     platform: "Instagram",
@@ -69,7 +69,7 @@ const socialPosts = [
     platform: "Instagram",
     title: "New work from the studio",
     href: "https://www.instagram.com/fira_cg/p/DTKdMGgDO5Q/",
-    src: "/portfolio/therizina-final.webp",
+    src: "/portfolio/therizina-final-web.webp",
   },
   {
     platform: "Instagram",
@@ -79,16 +79,28 @@ const socialPosts = [
   },
 ];
 
+const criticalAssets = [
+  "/portfolio/ksok2-web.webp",
+  "/portfolio/nyanchi/blink-1.png",
+  "/portfolio/nyanchi/pixel-speech-frame.svg",
+];
+
 function Reveal({ children, className = "" }: { children: React.ReactNode; className?: string }) {
   return <div className={`reveal ${className}`}>{children}</div>;
+}
+
+function PortfolioImage({
+  loading = "lazy",
+  decoding = "async",
+  ...props
+}: React.ImgHTMLAttributes<HTMLImageElement>) {
+  return <img loading={loading} decoding={decoding} {...props} />;
 }
 
 function PortfolioPreloader() {
   const [phase, setPhase] = useState<"loading" | "leaving" | "gone">("loading");
   const [progress, setProgress] = useState(0);
   const [loadedCount, setLoadedCount] = useState(0);
-  const [assetCount, setAssetCount] = useState(0);
-
   useEffect(() => {
     const startedAt = performance.now();
     let leaveTimer = 0;
@@ -98,7 +110,7 @@ function PortfolioPreloader() {
     const finish = () => {
       if (cancelled) return;
       setProgress(100);
-      const remaining = Math.max(0, 2350 - (performance.now() - startedAt));
+      const remaining = Math.max(0, 900 - (performance.now() - startedAt));
       leaveTimer = window.setTimeout(() => {
         setPhase("leaving");
         removeTimer = window.setTimeout(() => setPhase("gone"), 720);
@@ -106,38 +118,32 @@ function PortfolioPreloader() {
     };
 
     const base = import.meta.env.BASE_URL;
-    const warmAsset = async (path: string) => {
-      const url = `${base}${path.replace(/^\//, "")}`;
-      const response = await fetch(url, { cache: "force-cache" });
-      if (!response.ok) throw new Error(`Unable to preload ${url}: ${response.status}`);
-      await response.blob();
-    };
+    const warmImage = (path: string) =>
+      new Promise<void>((resolve) => {
+        const url = `${base}${path.replace(/^\//, "")}`;
+        const image = new Image();
+        image.decoding = "async";
+        image.onload = () => resolve();
+        image.onerror = () => resolve();
+        image.src = url;
+      });
 
     const preload = async () => {
       try {
-        const response = await fetch(`${base}portfolio-manifest.json`, { cache: "no-cache" });
-        if (!response.ok) throw new Error("Portfolio manifest is unavailable");
-        const { assets } = (await response.json()) as { assets: string[] };
-        setAssetCount(assets.length);
         let completed = 0;
-        const queue = [...assets];
-        const workers = Array.from({ length: Math.min(6, queue.length) }, async () => {
-          while (!cancelled) {
-            const asset = queue.shift();
-            if (!asset) return;
-            try {
-              await warmAsset(asset);
-            } catch (error) {
-              console.warn(error);
-            }
-            completed += 1;
-            if (!cancelled) {
-              setLoadedCount(completed);
-              setProgress(Math.round((completed / assets.length) * 100));
-            }
-          }
-        });
-        await Promise.all(workers);
+        await Promise.race([
+          Promise.all(
+            criticalAssets.map(async (asset) => {
+              await warmImage(asset);
+              completed += 1;
+              if (!cancelled) {
+                setLoadedCount(completed);
+                setProgress(Math.round((completed / criticalAssets.length) * 100));
+              }
+            }),
+          ),
+          new Promise((resolve) => window.setTimeout(resolve, 4000)),
+        ]);
       } catch (error) {
         console.warn(error);
       }
@@ -210,11 +216,9 @@ function PortfolioPreloader() {
       <p>
         Painting the final layer <span>{progress}%</span>
       </p>
-      {assetCount > 0 && (
-        <small>
-          {loadedCount} / {assetCount} assets ready
-        </small>
-      )}
+      <small>
+        {loadedCount} / {criticalAssets.length} essentials ready
+      </small>
     </div>
   );
 }
@@ -241,11 +245,11 @@ function CinematicVideo({ src, label, index }: { src: string; label: string; ind
     <figure className="video-frame reveal">
       <video
         ref={videoRef}
-        src={src}
+        data-src={src}
         muted
         loop
         playsInline
-        preload="metadata"
+        preload="none"
         data-autoplay
         aria-label={label}
       />
@@ -281,7 +285,10 @@ function ProcessCase() {
         </p>
       </Reveal>
       <div className="process-stage reveal">
-        <img src={stages[active].src} alt={`Raspberry fairy — ${stages[active].label} stage`} />
+        <PortfolioImage
+          src={stages[active].src}
+          alt={`Raspberry fairy — ${stages[active].label} stage`}
+        />
         <div className="process-progress" aria-label="Artwork process stages">
           {stages.map((stage, index) => (
             <button
@@ -338,23 +345,22 @@ const PortfolioShowcase = () => {
   }, []);
 
   useEffect(() => {
-    document.querySelectorAll<HTMLImageElement>("main img:not(.hero-canvas)").forEach((image) => {
-      image.loading = "lazy";
-      image.decoding = "async";
-    });
-
     const videos = Array.from(document.querySelectorAll<HTMLVideoElement>("video[data-autoplay]"));
     const observer = new IntersectionObserver(
       (entries) =>
         entries.forEach(({ target, isIntersecting }) => {
           const video = target as HTMLVideoElement;
           if (isIntersecting && video.dataset.userPaused !== "true") {
+            if (!video.src && video.dataset.src) {
+              video.src = video.dataset.src;
+              video.load();
+            }
             void video.play().catch(() => undefined);
           } else {
             video.pause();
           }
         }),
-      { rootMargin: "120px 0px", threshold: 0.18 },
+      { rootMargin: "600px 0px", threshold: 0.01 },
     );
     videos.forEach((video) => observer.observe(video));
     return () => observer.disconnect();
@@ -450,10 +456,11 @@ const PortfolioShowcase = () => {
     <main>
       <PortfolioPreloader />
       <section className="editorial-hero" id="home">
-        <img
+        <PortfolioImage
           className="hero-canvas"
-          src="/portfolio/ksok2.webp"
+          src="/portfolio/ksok2-web.webp"
           alt="Two men resting in a sunlit meadow"
+          loading="eager"
           fetchPriority="high"
         />
         <div className="hero-shade" />
@@ -493,10 +500,10 @@ const PortfolioShowcase = () => {
         <div className="manifesto-hologram" aria-hidden="true">
           <div className="manifesto-card">
             <div className="manifesto-card-face manifesto-card-front">
-              <img src="/portfolio/terezina/therezina-card-front.webp" alt="" />
+              <PortfolioImage src="/portfolio/terezina/therezina-card-front.webp" alt="" />
             </div>
             <div className="manifesto-card-face manifesto-card-back">
-              <img src="/portfolio/terezina/therezina-card-back.webp" alt="" />
+              <PortfolioImage src="/portfolio/terezina/therezina-card-back.webp" alt="" />
             </div>
           </div>
         </div>
@@ -519,8 +526,8 @@ const PortfolioShowcase = () => {
       <section className="featured-work" id="featured">
         <article className="feature feature-wide reveal">
           <div className="feature-media">
-            <img
-              src="/portfolio/therizina-final.webp"
+            <PortfolioImage
+              src="/portfolio/therizina-final-web.webp"
               alt="Two colourful therizinosaurs in a jungle"
             />
           </div>
@@ -536,7 +543,7 @@ const PortfolioShowcase = () => {
             <div className="feature-media feature-video-pair">
               <div>
                 <div className="card-blend-float" aria-label="Therizina holographic card">
-                  <img
+                  <PortfolioImage
                     src="/portfolio/terezina/therezina-card-front.webp"
                     alt="Finished Therizina card with holographic light moving across its surface"
                   />
@@ -545,11 +552,11 @@ const PortfolioShowcase = () => {
               </div>
               <div>
                 <video
-                  src="/portfolio/therizina-motion/card-process.mp4"
+                  data-src="/portfolio/therizina-motion/card-process.mp4"
                   muted
                   loop
                   playsInline
-                  preload="metadata"
+                  preload="none"
                   data-autoplay
                   aria-label="Therizina card creation process"
                 />
@@ -564,7 +571,10 @@ const PortfolioShowcase = () => {
           </article>
           <article className="feature feature-square reveal">
             <div className="feature-media">
-              <img src="/portfolio/cole-turner.webp" alt="Portrait illustration of Cole Turner" />
+              <PortfolioImage
+                src="/portfolio/cole-turner-web.webp"
+                alt="Portrait illustration of Cole Turner"
+              />
             </div>
             <div className="feature-meta">
               <p>Portrait · Fan art</p>
@@ -586,7 +596,7 @@ const PortfolioShowcase = () => {
           </p>
         </Reveal>
         <figure className="kcd-hero reveal">
-          <img
+          <PortfolioImage
             src="/portfolio/kcd/flowerfield-final.webp"
             alt="Two medieval characters in a flower field"
           />
@@ -600,7 +610,7 @@ const PortfolioShowcase = () => {
             ["flowerfield-ptacek.webp", "Character detail / Hans"],
           ].map(([src, title]) => (
             <figure className="reveal" key={src}>
-              <img src={`/portfolio/kcd/${src}`} alt={title} />
+              <PortfolioImage src={`/portfolio/kcd/${src}`} alt={title} />
               <figcaption>{title}</figcaption>
             </figure>
           ))}
@@ -633,7 +643,7 @@ const PortfolioShowcase = () => {
         </Reveal>
 
         <figure className="gaz-hero reveal">
-          <img
+          <PortfolioImage
             src="/portfolio/gaz-station/final.webp"
             alt="Cinematic 3D gas station at night in snow"
           />
@@ -670,8 +680,11 @@ const PortfolioShowcase = () => {
           <h2>Faces under pressure.</h2>
         </div>
         <div className="red-portraits">
-          <img src="/portfolio/henry-2.webp" alt="Red monochrome male portrait" />
-          <img src="/portfolio/henry-3.webp" alt="Second red monochrome male portrait" />
+          <PortfolioImage src="/portfolio/henry-2-web.webp" alt="Red monochrome male portrait" />
+          <PortfolioImage
+            src="/portfolio/henry-3-web.webp"
+            alt="Second red monochrome male portrait"
+          />
         </div>
       </section>
 
@@ -697,7 +710,7 @@ const PortfolioShowcase = () => {
               aria-controls="lineart-expanded-project"
               aria-label={`Show ${title} full line art project below`}
             >
-              <img src={`/portfolio/lineart/${src}`} alt={`${title} line art`} />
+              <PortfolioImage src={`/portfolio/lineart/${src}`} alt={`${title} line art`} />
               <span className="lineart-caption">
                 <span>{String(index + 1).padStart(2, "0")}</span>
                 {title}
@@ -717,7 +730,7 @@ const PortfolioShowcase = () => {
                 <X />
               </button>
             </header>
-            <img
+            <PortfolioImage
               src={`/portfolio/lineart/${selectedLineart[1]}`}
               alt={`${selectedLineart[2]} full line art and sketch`}
             />
@@ -744,7 +757,7 @@ const PortfolioShowcase = () => {
               rel="noreferrer"
               key={post.href}
             >
-              <img src={post.src} alt={`${post.title} preview`} />
+              <PortfolioImage src={post.src} alt={`${post.title} preview`} />
               <div>
                 <span>{post.platform}</span>
                 <h3>{post.title}</h3>
@@ -857,7 +870,10 @@ const PortfolioShowcase = () => {
       </section>
 
       <section className="support-block section-pad" id="support">
-        <img src="/portfolio/kcd/flowerfield-final.webp" alt="Flower field illustration detail" />
+        <PortfolioImage
+          src="/portfolio/kcd/flowerfield-final.webp"
+          alt="Flower field illustration detail"
+        />
         <div className="support-shade" />
         <Reveal className="support-copy">
           <p className="eyebrow">Support independent art</p>
@@ -883,7 +899,7 @@ const PortfolioShowcase = () => {
         <div className="sketch-grid">
           {sketches.slice(0, 6).map(([src, title]) => (
             <figure className="sketch-card reveal" key={src}>
-              <img src={`/portfolio/sketchbook/${src}`} alt={title} />
+              <PortfolioImage src={`/portfolio/sketchbook/${src}`} alt={title} />
               <figcaption>{title}</figcaption>
             </figure>
           ))}
@@ -916,7 +932,7 @@ const PortfolioShowcase = () => {
             </p>
           </Reveal>
           <figure className="closer-workspace reveal">
-            <img
+            <PortfolioImage
               src="/portfolio/closer/fira-at-work.jpg"
               alt="Fira drawing at her home workstation"
             />
@@ -935,42 +951,42 @@ const PortfolioShowcase = () => {
           </div>
           <div className="sculpture-strip">
             <figure className="reveal">
-              <img
+              <PortfolioImage
                 src="/portfolio/closer/dinosaurs-together.jpg"
                 alt="Handmade dinosaur sculptures arranged on a studio table"
               />
               <figcaption>Small studio herd</figcaption>
             </figure>
             <figure className="reveal">
-              <img
+              <PortfolioImage
                 src="/portfolio/closer/triceratops-process.jpg"
                 alt="Triceratops clay sculpture in progress"
               />
               <figcaption>Building the form</figcaption>
             </figure>
             <figure className="reveal">
-              <img
+              <PortfolioImage
                 src="/portfolio/closer/triceratops-hand.jpg"
                 alt="Small handmade triceratops sculpture held in one hand"
               />
               <figcaption>Hand-sized study</figcaption>
             </figure>
             <figure className="reveal">
-              <img
+              <PortfolioImage
                 src="/portfolio/closer/ankylosaur-study.webp"
                 alt="Detailed handmade ankylosaur clay sculpture"
               />
               <figcaption>Armour and texture study</figcaption>
             </figure>
             <figure className="reveal">
-              <img
+              <PortfolioImage
                 src="/portfolio/closer/triceratops-seated.jpg"
                 alt="Small triceratops clay sculpture held in one hand"
               />
               <figcaption>Character and gesture</figcaption>
             </figure>
             <figure className="reveal">
-              <img
+              <PortfolioImage
                 src="/portfolio/closer/triceratops-table.webp"
                 alt="Handmade triceratops sculpture displayed on a wooden base"
               />
@@ -989,16 +1005,22 @@ const PortfolioShowcase = () => {
             </h2>
           </Reveal>
           <div className="object-row">
-            {["potion-blue.webp", "potion-purple.webp", "potion-green.webp", "potion-red.webp"].map(
-              (src, index) => (
-                <figure className="object-card reveal" key={src}>
-                  <img src={`/portfolio/${src}`} alt={`Fantasy potion concept ${index + 1}`} />
-                  <figcaption>
-                    <span>0{index + 1}</span> Potion study
-                  </figcaption>
-                </figure>
-              ),
-            )}
+            {[
+              "potion-blue-web.webp",
+              "potion-purple.webp",
+              "potion-green-web.webp",
+              "potion-red-web.webp",
+            ].map((src, index) => (
+              <figure className="object-card reveal" key={src}>
+                <PortfolioImage
+                  src={`/portfolio/${src}`}
+                  alt={`Fantasy potion concept ${index + 1}`}
+                />
+                <figcaption>
+                  <span>0{index + 1}</span> Potion study
+                </figcaption>
+              </figure>
+            ))}
           </div>
         </div>
 
@@ -1018,7 +1040,7 @@ const PortfolioShowcase = () => {
               ["pencil-gems.webp", "Coloured pencil", "Gems and translucency"],
             ].map(([src, medium, title]) => (
               <figure className="reveal" key={src}>
-                <img src={`/portfolio/analog/${src}`} alt={title} />
+                <PortfolioImage src={`/portfolio/analog/${src}`} alt={title} />
                 <figcaption>
                   <span>{medium}</span> {title}
                 </figcaption>
@@ -1045,7 +1067,7 @@ const PortfolioShowcase = () => {
                   rel="noreferrer"
                   key={id}
                 >
-                  <img
+                  <PortfolioImage
                     src={`https://i.ytimg.com/vi/${id}/hqdefault.jpg`}
                     alt={`${title} YouTube preview`}
                   />
@@ -1071,11 +1093,11 @@ const PortfolioShowcase = () => {
           <div className="beyond-grid">
             <figure className="reveal beyond-anime">
               <video
-                src="/portfolio/motion/anime-pipeline.mp4"
+                data-src="/portfolio/motion/anime-pipeline.mp4"
                 muted
                 loop
                 playsInline
-                preload="metadata"
+                preload="none"
                 data-autoplay
                 aria-label="Anime production pipeline"
                 onTimeUpdate={(event) => {
@@ -1085,19 +1107,19 @@ const PortfolioShowcase = () => {
               <figcaption>Anime pipeline / storyboard → key frame → post FX</figcaption>
             </figure>
             <figure className="reveal">
-              <img
-                src="/portfolio/halloween-scene.webp"
+              <PortfolioImage
+                src="/portfolio/halloween-scene-web.webp"
                 alt="Halloween still life scene with pumpkins, candles and a cat"
               />
               <figcaption>Halloween scene / lighting & materials</figcaption>
             </figure>
             <figure className="reveal">
               <video
-                src="/portfolio/motion/pixel-kitchen.mp4"
+                data-src="/portfolio/motion/pixel-kitchen.mp4"
                 muted
                 loop
                 playsInline
-                preload="metadata"
+                preload="none"
                 data-autoplay
                 aria-label="Animated pixel-art kitchen"
               />
@@ -1207,23 +1229,23 @@ const PortfolioShowcase = () => {
         <div className="nyanchi-stage">
           <div className="nyanchi-actions" aria-label="Play with Nyanchi">
             <button onClick={() => playNyanchi("eat")} aria-label="Feed Nyanchi" title="Feed">
-              <img src="/portfolio/nyanchi/ui-icons/eat_icon.png" alt="" />
+              <PortfolioImage src="/portfolio/nyanchi/ui-icons/eat_icon.png" alt="" />
             </button>
             <button
               onClick={() => playNyanchi("drink")}
               aria-label="Give Nyanchi water"
               title="Drink"
             >
-              <img src="/portfolio/nyanchi/ui-icons/drink_icon.png" alt="" />
+              <PortfolioImage src="/portfolio/nyanchi/ui-icons/drink_icon.png" alt="" />
             </button>
             <button onClick={() => playNyanchi("call")} aria-label="Call Nyanchi" title="Call">
-              <img src="/portfolio/nyanchi/ui-icons/call_icon.png" alt="" />
+              <PortfolioImage src="/portfolio/nyanchi/ui-icons/call_icon.png" alt="" />
             </button>
             <button onClick={() => playNyanchi("nose")} aria-label="Pet Nyanchi" title="Pet">
-              <img src="/portfolio/nyanchi/ui-icons/heart_icon.png" alt="" />
+              <PortfolioImage src="/portfolio/nyanchi/ui-icons/heart_icon.png" alt="" />
             </button>
             <button onClick={() => playNyanchi("play")} aria-label="Play with Nyanchi" title="Play">
-              <img src="/portfolio/nyanchi/ui-icons/play_icon.png" alt="" />
+              <PortfolioImage src="/portfolio/nyanchi/ui-icons/play_icon.png" alt="" />
             </button>
           </div>
           <button
@@ -1239,7 +1261,11 @@ const PortfolioShowcase = () => {
             onClick={() => playNyanchi("nose")}
             aria-label="Poke Nyanchi's nose"
           >
-            <img src={nyanchiImage} alt="Nyanchi, Fira's interactive desktop cat" />
+            <PortfolioImage
+              src={nyanchiImage}
+              alt="Nyanchi, Fira's interactive desktop cat"
+              loading="eager"
+            />
           </button>
         </div>
       </aside>

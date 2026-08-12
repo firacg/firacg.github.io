@@ -97,6 +97,13 @@ export const Route = createRootRouteWithContext()({
         rel: "stylesheet",
         href: appCss,
       },
+      {
+        rel: "preload",
+        href: "/portfolio/ksok2-web.webp",
+        as: "image",
+        type: "image/webp",
+        fetchPriority: "high",
+      },
       { rel: "icon", href: "/favicon.ico", type: "image/x-icon" },
     ],
   }),
