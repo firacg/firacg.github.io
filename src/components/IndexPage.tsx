@@ -1,43 +1,42 @@
-import { useEffect } from "react";
+import { useEffect, useRef } from "react";
 import { useLocation } from "@tanstack/react-router";
 import Navigation from "@/components/Navigation";
-import Hero from "@/components/Hero";
-import BeforeAfter from "@/components/BeforeAfter";
-import BestWorks from "@/components/BestWorks";
-import Gallery from "@/components/Gallery";
-import CVTimeline from "@/components/CVTimeline";
-import SocialContact from "@/components/SocialContact";
+import PortfolioShowcase from "@/components/PortfolioShowcase";
 
 const IndexPage = () => {
   const location = useLocation();
+  const handledInitialNavigation = useRef(false);
 
   useEffect(() => {
-    if (location.hash) {
-      document.querySelector(`#${location.hash}`)?.scrollIntoView({ behavior: "smooth" });
+    if ("scrollRestoration" in history) {
+      history.scrollRestoration = "manual";
     }
-  }, [location.hash]);
+
+    if (!handledInitialNavigation.current) {
+      handledInitialNavigation.current = true;
+      const navigation = performance.getEntriesByType("navigation")[0] as
+        PerformanceNavigationTiming | undefined;
+      const isReload = navigation?.type === "reload";
+
+      if (isReload) {
+        history.replaceState(history.state, "", location.pathname + location.searchStr);
+        window.scrollTo({ top: 0, left: 0, behavior: "auto" });
+        requestAnimationFrame(() => window.scrollTo({ top: 0, left: 0, behavior: "auto" }));
+        return;
+      }
+    }
+
+    if (location.hash) {
+      document.getElementById(location.hash)?.scrollIntoView({ behavior: "smooth" });
+    } else {
+      window.scrollTo({ top: 0, left: 0, behavior: "auto" });
+    }
+  }, [location.hash, location.pathname, location.searchStr]);
 
   return (
     <div className="min-h-screen bg-background text-foreground overflow-x-hidden">
       <Navigation />
-      <section id="home">
-        <Hero />
-      </section>
-      <section id="process">
-        <BeforeAfter />
-      </section>
-      <section id="featured">
-        <BestWorks />
-      </section>
-      <section id="gallery">
-        <Gallery />
-      </section>
-      <section id="timeline">
-        <CVTimeline />
-      </section>
-      <section id="contact">
-        <SocialContact />
-      </section>
+      <PortfolioShowcase />
     </div>
   );
 };

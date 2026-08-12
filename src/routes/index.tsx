@@ -4,13 +4,13 @@ import IndexPage from "@/components/IndexPage";
 export const Route = createFileRoute("/")({
   head: () => ({
     meta: [
-      { title: "Fira CG — 2D Artist" },
+      { title: "Fira CG — Freelance 2D Artist & Visual Generalist" },
       {
         name: "description",
         content:
           "Game art for Plarium's Throne: Kingdom at War and Vikings: War of Clans, plus personal work.",
       },
-      { property: "og:title", content: "Fira CG — 2D Artist" },
+      { property: "og:title", content: "Fira CG — Freelance 2D Artist & Visual Generalist" },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
     ],

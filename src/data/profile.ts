@@ -1,14 +1,13 @@
 export const profile = {
   name: "Fira CG",
   fullName: "Dariya Dovhenko",
-  title: "2D Artist",
+  title: "Freelance 2D Artist & Visual Generalist",
   pitch: "I draw for game dev companies — characters, locations, props and items.",
   location: "Currently in Tbilisi, Georgia",
   languages: ["English", "Ukrainian", "Russian", "Japanese (elementary)"],
-  email: "maboroshi94@gmail.com",
+  email: "firacgi@gmail.com",
   skills: ["Game Art", "Character Design", "Concept Development"],
-  // Draft — replace with Dariya's own wording before shipping.
-  bio: "Painting is where I started, years at art college before games ever entered the picture. Since 2018 I've worked inside game studios — Nordcurrent, DEFU Games, now GAMETEQ — taking characters from a rough thumbnail to a finished piece ready for production, on titles including Plarium's Throne: Kingdom at War and Vikings: War of Clans. I still sketch by hand before touching a tablet.",
+  bio: "Painting is where I started, years at art college before games ever entered the picture. Since 2018 I've worked inside game studios — Nordcurrent, DEFU Games and GAMETEQ — taking characters from a rough thumbnail to a finished piece ready for production, on titles including Plarium's Throne: Kingdom at War and Vikings: War of Clans. Since July 2026 I have worked independently as a freelance 2D artist and visual generalist.",
 };
 
 export const social = {
@@ -17,7 +16,7 @@ export const social = {
   behance: "https://www.behance.net/maboroshi94",
   linkedin: "https://www.linkedin.com/in/firacg/",
   tumblr: "https://www.tumblr.com/blog/firacgart",
-  telegram: "https://t.me/Fira_cg_art",
+  telegram: "https://t.me/firacg",
 };
 
 export const payments = {
@@ -49,11 +48,12 @@ export interface ExperienceItem {
 
 export const experience: ExperienceItem[] = [
   {
-    year: "2024 — сейчас",
+    year: "2024 — July 2026",
     type: "work",
     title: "2D Artist",
     company: "GAMETEQ",
     location: "Тбилиси",
+    description: "2D production art and visual development for game projects.",
   },
   {
     year: "2021 — 2023",
@@ -61,6 +61,8 @@ export const experience: ExperienceItem[] = [
     title: "Lead 2D Artist",
     company: "DEFU Games",
     location: "Одесса",
+    description:
+      "Led and contributed to 2D production across Love Camp, Pulse of Love, Candy Puzzle, Puzzle Kingdom, Money Rush and Egg Wars.",
   },
   {
     year: "2020 — 2023",
@@ -82,6 +84,8 @@ export const experience: ExperienceItem[] = [
     title: "Художник",
     company: "Nordcurrent",
     location: "Одесская область",
+    description:
+      "Concept art, character close-ups and illustrations for Murder by Choice: Mystery Game.",
   },
   {
     year: "2015 — 2016",
@@ -98,10 +102,17 @@ export const experience: ExperienceItem[] = [
     location: "Одесса",
   },
   {
-    year: "2016 — 2020",
+    year: "2016 — 2018",
     type: "education",
-    title: "Младший специалист, Живопись",
+    title: "Fine Art",
     company: "Одесское художественное училище им. М. Б. Грекова",
+    location: "Одесса",
+  },
+  {
+    year: "2015 — 2016",
+    type: "education",
+    title: "Graphic Design",
+    company: "IT Step Academy",
     location: "Одесса",
   },
   {

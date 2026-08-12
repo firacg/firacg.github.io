@@ -4,13 +4,10 @@ import { Button } from "@/components/ui/button";
 import { Menu, X } from "lucide-react";
 
 const navItems = [
-  { name: "Home", href: "#home" },
+  { name: "Work", href: "#selected" },
   { name: "Process", href: "#process" },
-  { name: "Featured", href: "#featured" },
-  { name: "Gallery", href: "#gallery" },
-  { name: "Timeline", href: "#timeline" },
-  { name: "Blog", href: "/blog" },
-  { name: "Contact", href: "#contact" },
+  { name: "Line art", href: "#lineart" },
+  { name: "About", href: "#about" },
 ];
 
 const Navigation = () => {
@@ -44,20 +41,18 @@ const Navigation = () => {
   return (
     <nav
       className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
-        isScrolled
-          ? "bg-background/85 backdrop-blur-md border-b border-border"
-          : "bg-transparent"
+        isScrolled ? "bg-background/85 backdrop-blur-md border-b border-border" : "bg-transparent"
       }`}
     >
       <div className="max-w-7xl mx-auto px-6">
         <div className="flex items-center justify-between h-16">
           {/* Logo */}
-          <div className="font-display text-xl font-extrabold uppercase tracking-tight text-foreground">
-            Fira CG
+          <div className="site-mark">
+            FIRA<span>CG</span>
           </div>
 
           {/* Desktop Navigation */}
-          <div className="hidden md:flex items-center space-x-8">
+          <div className="hidden md:flex items-center space-x-8 nav-links">
             {navItems.map((item) => (
               <button
                 key={item.name}
@@ -68,6 +63,12 @@ const Navigation = () => {
               </button>
             ))}
           </div>
+          <button
+            className="nav-contact hidden md:inline-flex"
+            onClick={() => scrollToSection("#contact")}
+          >
+            Let’s talk
+          </button>
 
           {/* Mobile menu button */}
           <Button

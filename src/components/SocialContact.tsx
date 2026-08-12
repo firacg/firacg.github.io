@@ -76,7 +76,7 @@ const socialLinks = [
   {
     icon: <Send className="w-6 h-6" />,
     name: "Telegram",
-    handle: "Fira_cg_art",
+    handle: "firacg",
     href: social.telegram,
     color: "hover:text-sky-400",
   },

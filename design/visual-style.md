@@ -161,12 +161,14 @@ confidence, not a showreel of animation tricks.
 ## Connectors
 
 ### HTML Slides
+
 Map `colors.primary`/`accent`/`neutral` to CSS custom properties
 (`--bg`, `--fg`, `--accent`, `--panel`, `--border`, `--muted`). Load
 Montserrat 800 and Inter 400/500 from Google Fonts. Use `typography.display`
 for h1/h2, `typography.caption` for nav/filter/button labels.
 
 ### Figma
+
 Build color styles from `colors.*` directly (6 colors total — deliberately
 small palette). Text styles: Display/H1 (Montserrat 800, tight tracking),
 Body (Inter 400), Caption (Inter 500, uppercase). Component candidates:

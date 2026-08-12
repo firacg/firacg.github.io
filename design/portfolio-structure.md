@@ -12,7 +12,7 @@ these sections in order: `Navigation` → `Hero` (#home) → `BeforeAfter`
 (#process) → `BestWorks` (#featured) → `Gallery` (#gallery) → `CVTimeline`
 (#timeline) → `SocialContact` (#contact). The plan below keeps this same
 component list and section order (so anchor links / nav don't break) and
-describes what changes *inside* each block.
+describes what changes _inside_ each block.
 
 ## Cross-site lesson recap (why these changes)
 
@@ -35,6 +35,7 @@ describes what changes *inside* each block.
 ## Section-by-section plan
 
 ### Navigation (`Navigation.tsx`)
+
 - Sticky, translucent dark bar (`rgba(18,18,18,0.85)` over `--b-bg`), blurs
   legibly over the hero/gallery as the page scrolls — pattern seen on Melior
   Games.
@@ -43,6 +44,7 @@ describes what changes *inside* each block.
   filled pill (keep chrome quiet, per the "one accent" rule).
 
 ### Hero (`Hero.tsx`) — `#home`
+
 - Keep it short, no stat-counter wall (Fira doesn't have "1000+ games
   shipped" scale numbers, and faking that register reads as corporate/false).
   Instead: headline + one-sentence pitch (already in `CONTENT.md`) + a single
@@ -54,24 +56,27 @@ describes what changes *inside* each block.
   3-4s background zoom on a hero illustration, per `visual-style.md`.
 
 ### Process (`BeforeAfter.tsx`) — `#process`
+
 - Keep the sketch → final mechanism as-is (it's a genuinely distinctive block
   none of the 8 references have — a differentiator, not something to dilute).
   Restyle only: charcoal panel background, hairline border, Signal Pink for
   the slider handle/active state instead of the current magical-glow.
 
 ### Featured (`BestWorks.tsx`) — `#featured`
+
 - Structural change: convert from a plain image carousel to short
   **case-study cards** (Twin Win / Whimsy pattern) — each card: image + title
-  + one-sentence description of the project and Fira's role (e.g. "Character
-  designs for Throne: Kingdom at War — 12 playable heroes"). Data already
-  fits the existing `works` table (`title`, `project`, `category`); the
-  one-sentence description can be authored per featured piece, no schema
-  change needed (or, if useful later, `project` field can double as that
-  description — confirm with Fira before adding a new column).
+  - one-sentence description of the project and Fira's role (e.g. "Character
+    designs for Throne: Kingdom at War — 12 playable heroes"). Data already
+    fits the existing `works` table (`title`, `project`, `category`); the
+    one-sentence description can be authored per featured piece, no schema
+    change needed (or, if useful later, `project` field can double as that
+    description — confirm with Fira before adding a new column).
 - Carousel mechanics unchanged (arrows/swipe), just restyle to dark
   panel + pink accent on active dot/arrow.
 
 ### Full Gallery (`Gallery.tsx`) — `#gallery`
+
 - Filter bar: keep the existing flat single-row category buttons (already
   matches the universal genre pattern — no nested taxonomy needed). Active
   filter = Signal Pink fill instead of the current "magical" variant.
@@ -87,6 +92,7 @@ describes what changes *inside* each block.
   component) — just restyle the scrim/chrome to match the dark palette.
 
 ### CV / About (`CVTimeline.tsx`) — `#timeline`
+
 - Keep the timeline mechanism (existing CV data from `CONTENT.md` — GAMETEQ,
   DEFU Games, Nordcurrent, etc.), but add a short personal intro block above
   it: a one-paragraph "About Fira" bio + (optional) a photo, functioning as
@@ -95,6 +101,7 @@ describes what changes *inside* each block.
   (needs a short bio from Fira) but no new data infrastructure.
 
 ### Contact (`SocialContact.tsx` + `CommissionForm.tsx`) — `#contact`
+
 - No structural change — this block already does what the references treat
   as essential (dedicated section, not a footer link): contact info, socials,
   commission process/restrictions, and the request form + Ko-fi/PayPal
@@ -105,6 +112,7 @@ describes what changes *inside* each block.
   unlike decorative "01/02/03" card labels seen on some references).
 
 ### Blog (`BlogList.tsx`, `BlogPostView.tsx`)
+
 - Out of scope for the studio-portfolio pattern language (no reference site
   had a blog) — just inherit the same color/type tokens from
   `visual-style.md` for consistency (dark canvas, Montserrat headings, Inter
@@ -112,6 +120,7 @@ describes what changes *inside* each block.
   here).
 
 ### Admin (`/admin/*`)
+
 - Not part of this visual system — CRM should stay a plain, functional
   utility UI. Do not apply the gallery/hero treatment there; at most, inherit
   the base color tokens for visual consistency when the admin is viewed

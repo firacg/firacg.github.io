@@ -19,6 +19,10 @@ dist-ssr
 # Wrangler / Cloudflare
 .wrangler/
 .dev.vars
+.playwright-cli/
+output/
+tmp/
+CLAUDE_HANDOFF.md
 
 # Editor directories and files
 .vscode/*

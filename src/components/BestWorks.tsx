@@ -90,9 +90,7 @@ const BestWorks = () => {
                 key={index}
                 onClick={() => setCurrentSlide(index)}
                 className={`w-3 h-3 rounded-full transition-all duration-300 ${
-                  index === currentSlide
-                    ? "bg-primary scale-125"
-                    : "bg-muted hover:bg-primary/50"
+                  index === currentSlide ? "bg-primary scale-125" : "bg-muted hover:bg-primary/50"
                 }`}
               />
             ))}
