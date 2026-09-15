@@ -78,13 +78,20 @@ export const Route = createRootRouteWithContext()({
     meta: [
       { charSet: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1" },
-      { title: "Fira CG" },
-      { name: "description", content: "Fira CG — 2D artist for game dev." },
-      { property: "og:title", content: "Fira CG" },
-      { property: "og:description", content: "Fira CG — 2D artist for game dev." },
+      { title: "Fira CG — 2D Game Artist & Visual Generalist" },
+      {
+        name: "description",
+        content: "Hand-drawn character art, key art and visual development for games by Fira CG.",
+      },
+      { property: "og:title", content: "Fira CG — 2D Game Artist & Visual Generalist" },
+      {
+        property: "og:description",
+        content: "Hand-drawn character art, key art and visual development for games by Fira CG.",
+      },
       { property: "og:type", content: "website" },
+      { property: "og:url", content: "https://firacg.github.io/" },
+      { property: "og:image", content: "https://firacg.github.io/portfolio/ksok2-web.webp" },
       { name: "twitter:card", content: "summary_large_image" },
-      { name: "twitter:site", content: "@Lovable" },
     ],
     links: [
       { rel: "preconnect", href: "https://fonts.googleapis.com" },
@@ -105,6 +112,7 @@ export const Route = createRootRouteWithContext()({
         fetchPriority: "high",
       },
       { rel: "icon", href: "/favicon.ico", type: "image/x-icon" },
+      { rel: "canonical", href: "https://firacg.github.io/" },
     ],
   }),
   shellComponent: RootShell,

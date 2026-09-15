@@ -48,12 +48,12 @@ export interface ExperienceItem {
 
 export const experience: ExperienceItem[] = [
   {
-    year: "2024 — July 2026",
+    year: "January 2024 — July 2026",
     type: "work",
     title: "2D Artist",
     company: "GAMETEQ",
-    location: "Тбилиси",
-    description: "2D production art and visual development for game projects.",
+    location: "Tbilisi, Georgia · Hybrid",
+    description: "Full-time 2D Artist.",
   },
   {
     year: "2021 — 2023",

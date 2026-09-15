@@ -76,6 +76,9 @@ const Navigation = () => {
             size="icon"
             onClick={() => setIsOpen(!isOpen)}
             className="md:hidden"
+            aria-label={isOpen ? "Close navigation menu" : "Open navigation menu"}
+            aria-expanded={isOpen}
+            aria-controls="mobile-navigation"
           >
             {isOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
           </Button>
@@ -83,7 +86,10 @@ const Navigation = () => {
 
         {/* Mobile Navigation */}
         {isOpen && (
-          <div className="md:hidden bg-card/95 backdrop-blur-md border border-border rounded-lg mt-2">
+          <div
+            className="md:hidden bg-card/95 backdrop-blur-md border border-border rounded-lg mt-2"
+            id="mobile-navigation"
+          >
             <div className="px-4 pt-2 pb-4 space-y-2">
               {navItems.map((item) => (
                 <button

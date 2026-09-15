@@ -82,7 +82,7 @@ def cv_pdf():
 
     jobs = [
         ("2026 - NOW", "Freelance 2D Artist & Visual Generalist", "Independent / Tbilisi"),
-        ("2024 - JUL 2026", "2D Artist", "GAMETEQ / production art & visual development"),
+        ("JAN 2024 - JUL 2026", "2D Artist", "GAMETEQ / Full-time / Tbilisi, Georgia / Hybrid"),
         ("2021 - 2023", "Lead 2D Artist", "DEFU Games / six shipped game projects"),
         ("2020 - 2021", "2D Artist", "DEFU Games / game art production"),
         ("2019 - 2020", "2D Artist, Freelance", "Illustration, portrait and icon commissions"),

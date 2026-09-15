@@ -1,11 +1,10 @@
-import { useEffect, useRef, useState } from "react";
+import { Fragment, useEffect, useRef, useState } from "react";
 import {
   ArrowDownRight,
   ArrowUpRight,
   Download,
   Instagram,
   Linkedin,
-  Mail,
   MapPin,
   Pause,
   Palette,
@@ -13,7 +12,13 @@ import {
   Send,
   X,
 } from "lucide-react";
-import { payments, profile, social } from "@/data/profile";
+import { payments, social } from "@/data/profile";
+
+const contactEmailCodes = [
+  102, 105, 114, 97, 99, 103, 105, 64, 103, 109, 97, 105, 108, 46, 99, 111, 109,
+];
+
+const readContactEmail = () => String.fromCharCode(...contactEmailCodes);
 
 const stages = [
   { src: "/portfolio/raspberry-01-line.png", label: "Line" },
@@ -23,26 +28,29 @@ const stages = [
   { src: "/portfolio/raspberry-05-final-web.webp", label: "Final" },
 ];
 
+const SHOW_RASPBERRY_PROCESS = false;
+const SHOW_COLE_TURNER = false;
+
 const lineart = [
-  ["Line_low-cover.png", "Line_low-1.webp", "Lowe"],
-  ["Line_skeggi-cover.png", "Line_skeggi-1.webp", "Skeggi"],
-  ["love_vkg-cover.png", "love_vkg-1.webp", "Viking story"],
-  ["THR_cat_knight-cover.png", "THR_cat_knight-1.webp", "Cat knight"],
-  ["VKG_daynight-cover.png", "VKG_daynight-1.webp", "Day & night"],
-  ["VKG_wolf-cover.png", "VKG_wolf-1.webp", "The wolf"],
+  ["Line_low-cover.webp", "Line_low-1.webp", "Lowe"],
+  ["Line_skeggi-cover.webp", "Line_skeggi-1.webp", "Skeggi"],
+  ["love_vkg-cover.webp", "love_vkg-1.webp", "Viking story"],
+  ["THR_cat_knight-cover.webp", "THR_cat_knight-1.webp", "Cat knight"],
+  ["VKG_daynight-cover.webp", "VKG_daynight-1.webp", "Day & night"],
+  ["VKG_wolf-cover.webp", "VKG_wolf-1.webp", "The wolf"],
 ];
 
 const sketches = [
-  ["portrait-girl.png", "Portrait study"],
-  ["portrait-boy.webp", "Value study"],
-  ["madmax-studies.webp", "Furiosa studies"],
-  ["gesture-030324.webp", "Gesture practice"],
-  ["gesture-170424.webp", "Weekly sketching"],
-  ["composition-studies.webp", "Composition notes"],
-  ["anatomy-hands.png", "Hands / anatomy"],
-  ["anatomy-hand-forms.webp", "Hand construction"],
-  ["anatomy-torso.webp", "Torso construction"],
-  ["master-studies.webp", "Master studies"],
+  ["2026/portrait1.webp", "Portrait studies / 01"],
+  ["2026/portrait2.webp", "Portrait studies / 02"],
+  ["2026/portraits3.webp", "Portrait studies / 03"],
+  ["2026/hands.webp", "Hands and expression"],
+  ["2026/muscle.webp", "Anatomy notes"],
+  ["2026/sketchesthumb.webp", "Thumbnail sketches"],
+  ["2026/thumbnails2.webp", "Composition thumbnails"],
+  ["2026/trees.webp", "Tree studies"],
+  ["2026/bike.webp", "Flower bicycle"],
+  ["2026/casual.webp", "Casual game study"],
 ];
 
 const heroSocials = [
@@ -54,28 +62,64 @@ const heroSocials = [
 
 const socialPosts = [
   {
-    platform: "ArtStation",
-    title: "KSOK — full project",
+    title: "Throne: Kingdom at War",
+    href: "https://www.artstation.com/artwork/41omxl",
+    src: "/portfolio/artstation/01.webp",
+  },
+  {
+    title: "Throne: Kingdom at War",
+    href: "https://www.artstation.com/artwork/o0X3RO",
+    src: "/portfolio/artstation/02.webp",
+  },
+  {
+    title: "Throne: Kingdom at War",
+    href: "https://www.artstation.com/artwork/xdA1yW",
+    src: "/portfolio/artstation/03.webp",
+  },
+  {
+    title: "Throne: Kingdom at War",
+    href: "https://www.artstation.com/artwork/Y8LwZw",
+    src: "/portfolio/artstation/04.webp",
+  },
+  {
+    title: "KSOK",
     href: "https://www.artstation.com/artwork/DYk0Wo",
-    src: "/portfolio/ksok2-web.webp",
+    src: "/portfolio/artstation/05.webp",
   },
   {
-    platform: "Instagram",
-    title: "Character art & process",
-    href: "https://www.instagram.com/fira_cg/p/Dbp6SL1DO3c/?img_index=2",
-    src: "/portfolio/kcd/flowerfield-final.webp",
+    title: "Throne: Kingdom at War",
+    href: "https://www.artstation.com/artwork/lE1B5G",
+    src: "/portfolio/artstation/06.webp",
   },
   {
-    platform: "Instagram",
-    title: "New work from the studio",
-    href: "https://www.instagram.com/fira_cg/p/DTKdMGgDO5Q/",
-    src: "/portfolio/therizina-final-web.webp",
+    title: "Throne: Kingdom at War",
+    href: "https://www.artstation.com/artwork/lE1Bba",
+    src: "/portfolio/artstation/07.webp",
   },
   {
-    platform: "Instagram",
-    title: "Sketches and studies",
-    href: "https://www.instagram.com/p/DG0_z6QMOwp/?img_index=2",
-    src: "/portfolio/sketchbook/madmax-studies.webp",
+    title: "Vikings: War of Clans",
+    href: "https://www.artstation.com/artwork/gRYk8L",
+    src: "/portfolio/artstation/08.webp",
+  },
+  {
+    title: "Throne: Kingdom at War",
+    href: "https://www.artstation.com/artwork/La5oWR",
+    src: "/portfolio/artstation/09.webp",
+  },
+  {
+    title: "Throne: Kingdom at War",
+    href: "https://www.artstation.com/artwork/O3qLke",
+    src: "/portfolio/artstation/10.webp",
+  },
+  {
+    title: "Easter Illustration",
+    href: "https://www.artstation.com/artwork/L4nQa5",
+    src: "/portfolio/artstation/11.webp",
+  },
+  {
+    title: "Vikings: War of Clans",
+    href: "https://www.artstation.com/artwork/lGgJxo",
+    src: "/portfolio/artstation/12.webp",
   },
 ];
 
@@ -309,8 +353,15 @@ function ProcessCase() {
 
 const PortfolioShowcase = () => {
   const [selectedLineart, setSelectedLineart] = useState<(typeof lineart)[number] | null>(null);
+  const [selectedArtwork, setSelectedArtwork] = useState<{
+    src: string;
+    alt: string;
+    title: string;
+  } | null>(null);
   const [nyanchiOpen, setNyanchiOpen] = useState(false);
+  const [motionSlide, setMotionSlide] = useState(0);
   const [nyanchiQuiet, setNyanchiQuiet] = useState(false);
+  const [emailRevealed, setEmailRevealed] = useState(false);
   const [nyanchiFrame, setNyanchiFrame] = useState(1);
   const [nyanchiAction, setNyanchiAction] = useState<
     "idle" | "eat" | "call" | "nose" | "drink" | "play"
@@ -432,6 +483,14 @@ const PortfolioShowcase = () => {
     setNyanchiAction(action);
   };
 
+  const handleProtectedEmail = () => {
+    if (!emailRevealed) {
+      setEmailRevealed(true);
+      return;
+    }
+    window.location.href = `mailto:${readContactEmail()}`;
+  };
+
   const nyanchiImage = (() => {
     if (nyanchiAction === "idle") return `/portfolio/nyanchi/blink-${nyanchiFrame}.png`;
     if (nyanchiAction === "nose") {
@@ -448,9 +507,30 @@ const PortfolioShowcase = () => {
   useEffect(() => {
     if (!selectedLineart) return;
     const close = (event: KeyboardEvent) => event.key === "Escape" && setSelectedLineart(null);
+    const frame = window.requestAnimationFrame(() => {
+      document.getElementById("lineart-expanded-project")?.scrollIntoView({
+        behavior: window.matchMedia("(prefers-reduced-motion: reduce)").matches ? "auto" : "smooth",
+        block: "start",
+      });
+    });
     window.addEventListener("keydown", close);
-    return () => window.removeEventListener("keydown", close);
+    return () => {
+      window.cancelAnimationFrame(frame);
+      window.removeEventListener("keydown", close);
+    };
   }, [selectedLineart]);
+
+  useEffect(() => {
+    if (!selectedArtwork) return;
+    const previousOverflow = document.body.style.overflow;
+    const close = (event: KeyboardEvent) => event.key === "Escape" && setSelectedArtwork(null);
+    document.body.style.overflow = "hidden";
+    window.addEventListener("keydown", close);
+    return () => {
+      document.body.style.overflow = previousOverflow;
+      window.removeEventListener("keydown", close);
+    };
+  }, [selectedArtwork]);
 
   return (
     <main>
@@ -477,9 +557,6 @@ const PortfolioShowcase = () => {
           <div className="hero-actions" aria-label="Downloads">
             <a href="/downloads/Fira-CG-CV.pdf" download>
               <Download /> Download CV
-            </a>
-            <a href="/downloads/Fira-CG-Portfolio.pdf" download>
-              <Download /> Download Portfolio
             </a>
           </div>
         </div>
@@ -510,181 +587,15 @@ const PortfolioShowcase = () => {
         <Reveal>
           <p className="eyebrow">What I do</p>
           <div className="manifesto-copy">
-            <p>Concept art with a painter’s eye.</p>
-            <p>A production artist’s discipline.</p>
-            <p>Expressive characters, readable worlds and game-ready visual ideas.</p>
+            <p>Production art pipelines,</p>
+            <p>Expressive characters, atmosphere, readable emotions and game-ready visuals.</p>
           </div>
         </Reveal>
         <div className="capabilities reveal" aria-label="Jump to a discipline">
           <a href="#featured">Character design</a>
           <a href="#key-art">Key art</a>
           <a href="#objects">Props & items</a>
-          <a href="#process">Visual development</a>
-        </div>
-      </section>
-
-      <section className="featured-work" id="featured">
-        <article className="feature feature-wide reveal">
-          <div className="feature-media">
-            <PortfolioImage
-              src="/portfolio/therizina-final-web.webp"
-              alt="Two colourful therizinosaurs in a jungle"
-            />
-          </div>
-          <div className="feature-meta">
-            <p>Creature illustration · Fan art</p>
-            <h2>Therizina</h2>
-            <span>Colour, atmosphere and creature storytelling</span>
-          </div>
-        </article>
-
-        <div className="feature-grid section-pad">
-          <article className="feature feature-portrait reveal">
-            <div className="feature-media feature-video-pair">
-              <div>
-                <div className="card-blend-float" aria-label="Therizina holographic card">
-                  <PortfolioImage
-                    src="/portfolio/terezina/therezina-card-front.webp"
-                    alt="Finished Therizina card with holographic light moving across its surface"
-                  />
-                </div>
-                <span>Final card</span>
-              </div>
-              <div>
-                <video
-                  data-src="/portfolio/therizina-motion/card-process.mp4"
-                  muted
-                  loop
-                  playsInline
-                  preload="none"
-                  data-autoplay
-                  aria-label="Therizina card creation process"
-                />
-                <span>Making of</span>
-              </div>
-            </div>
-            <div className="feature-meta">
-              <p>Motion presentation · Process</p>
-              <h3>Card in motion</h3>
-              <span>A floating final card paired with its full creation process.</span>
-            </div>
-          </article>
-          <article className="feature feature-square reveal">
-            <div className="feature-media">
-              <PortfolioImage
-                src="/portfolio/cole-turner-web.webp"
-                alt="Portrait illustration of Cole Turner"
-              />
-            </div>
-            <div className="feature-meta">
-              <p>Portrait · Fan art</p>
-              <h3>Cole Turner</h3>
-              <span>Shape, likeness and controlled colour.</span>
-            </div>
-          </article>
-        </div>
-      </section>
-
-      <section className="kcd-case section-pad" id="key-art">
-        <Reveal className="section-intro horizontal">
-          <div>
-            <p className="eyebrow">Key art / Kingdom Come: Deliverance</p>
-            <h2>Flower field</h2>
-          </div>
-          <p>
-            Characters, staging and a 3D-assisted paintover brought together as one narrative image.
-          </p>
-        </Reveal>
-        <figure className="kcd-hero reveal">
-          <PortfolioImage
-            src="/portfolio/kcd/flowerfield-final.webp"
-            alt="Two medieval characters in a flower field"
-          />
-          <figcaption>Final illustration</figcaption>
-        </figure>
-        <div className="kcd-process">
-          {[
-            ["flowerfield-blockout.webp", "3D blockout"],
-            ["flowerfield-paintover.webp", "Paintover"],
-            ["flowerfield-henry.webp", "Character detail / Henry"],
-            ["flowerfield-ptacek.webp", "Character detail / Hans"],
-          ].map(([src, title]) => (
-            <figure className="reveal" key={src}>
-              <PortfolioImage src={`/portfolio/kcd/${src}`} alt={title} />
-              <figcaption>{title}</figcaption>
-            </figure>
-          ))}
-        </div>
-      </section>
-
-      <ProcessCase />
-
-      <section className="gaz-case section-pad" id="gaz-station">
-        <Reveal className="gaz-heading">
-          <div>
-            <p className="eyebrow">3D environment / Blender</p>
-            <h2>
-              Midnight
-              <br />
-              fuel stop.
-            </h2>
-          </div>
-          <div className="gaz-summary">
-            <p>
-              A real-world station rebuilt as a cinematic winter environment — from architectural
-              reference and modular modelling to materials, lighting and final atmosphere.
-            </p>
-            <ul aria-label="Project disciplines">
-              <li>Environment design</li>
-              <li>Modelling & texturing</li>
-              <li>Lighting & look development</li>
-            </ul>
-          </div>
-        </Reveal>
-
-        <figure className="gaz-hero reveal">
-          <PortfolioImage
-            src="/portfolio/gaz-station/final.webp"
-            alt="Cinematic 3D gas station at night in snow"
-          />
-          <figcaption>
-            <span>01</span> Final frame / night lighting
-          </figcaption>
-        </figure>
-      </section>
-
-      <section className="motion-case section-pad" id="motion">
-        <div className="motion-copy reveal">
-          <p className="eyebrow">Process in motion</p>
-          <h2>A painting is a sequence of decisions.</h2>
-          <p>Watch the image move from broad structure to light, colour and final detail.</p>
-        </div>
-        <div className="motion-gallery">
-          {[
-            ["/portfolio/ksok-process.mp4", "Process film / KSOK"],
-            ["/portfolio/motion/anime-pipeline.mp4", "Storyboards to final frame"],
-          ].map(([src, label], index) => (
-            <CinematicVideo
-              key={src}
-              src={src}
-              label={label}
-              index={String(index + 1).padStart(2, "0")}
-            />
-          ))}
-        </div>
-      </section>
-
-      <section className="red-interlude">
-        <div className="red-copy reveal">
-          <p className="eyebrow">Portrait experiments</p>
-          <h2>Faces under pressure.</h2>
-        </div>
-        <div className="red-portraits">
-          <PortfolioImage src="/portfolio/henry-2-web.webp" alt="Red monochrome male portrait" />
-          <PortfolioImage
-            src="/portfolio/henry-3-web.webp"
-            alt="Second red monochrome male portrait"
-          />
+          <a href="#gaz-station">Visual development</a>
         </div>
       </section>
 
@@ -694,48 +605,53 @@ const PortfolioShowcase = () => {
             <p className="eyebrow">Production work</p>
             <h2>Line art</h2>
           </div>
-          <p>Clean silhouettes, confident gesture and detail that survives at game scale.</p>
+          <p>
+            <strong>Hand-drawn · No AI.</strong>
+            <br />
+            Production-ready line art for games.
+          </p>
         </Reveal>
         <div className="lineart-track">
           {lineart.map(([src, full, title], index) => (
-            <button
-              className={`lineart-card reveal ${selectedLineart?.[1] === full ? "is-open" : ""}`}
-              key={src}
-              onClick={() =>
-                setSelectedLineart((current) =>
-                  current?.[1] === full ? null : ([src, full, title] as (typeof lineart)[number]),
-                )
-              }
-              aria-expanded={selectedLineart?.[1] === full}
-              aria-controls="lineart-expanded-project"
-              aria-label={`Show ${title} full line art project below`}
-            >
-              <PortfolioImage src={`/portfolio/lineart/${src}`} alt={`${title} line art`} />
-              <span className="lineart-caption">
-                <span>{String(index + 1).padStart(2, "0")}</span>
-                {title}
-                <ArrowUpRight />
-              </span>
-            </button>
+            <Fragment key={src}>
+              <button
+                className={`lineart-card reveal ${selectedLineart?.[1] === full ? "is-open" : ""}`}
+                onClick={() =>
+                  setSelectedLineart((current) =>
+                    current?.[1] === full ? null : ([src, full, title] as (typeof lineart)[number]),
+                  )
+                }
+                aria-expanded={selectedLineart?.[1] === full}
+                aria-controls="lineart-expanded-project"
+                aria-label={`Expand ${title} full line art project below`}
+              >
+                <PortfolioImage src={`/portfolio/lineart/${src}`} alt={`${title} line art`} />
+                <span className="lineart-caption">
+                  <span>{String(index + 1).padStart(2, "0")}</span>
+                  {title}
+                  <ArrowUpRight />
+                </span>
+              </button>
+              {selectedLineart?.[1] === full && (
+                <article className="lineart-expanded" id="lineart-expanded-project">
+                  <header>
+                    <button
+                      type="button"
+                      onClick={() => setSelectedLineart(null)}
+                      aria-label="Close project"
+                    >
+                      <X />
+                    </button>
+                  </header>
+                  <PortfolioImage
+                    src={`/portfolio/lineart/${full}`}
+                    alt={`${title} full line art and sketch`}
+                  />
+                </article>
+              )}
+            </Fragment>
           ))}
         </div>
-        {selectedLineart && (
-          <article className="lineart-expanded" id="lineart-expanded-project">
-            <header>
-              <div>
-                <p className="eyebrow">Full project / sketch to line</p>
-                <h3>{selectedLineart[2]}</h3>
-              </div>
-              <button onClick={() => setSelectedLineart(null)} aria-label="Collapse project">
-                <X />
-              </button>
-            </header>
-            <PortfolioImage
-              src={`/portfolio/lineart/${selectedLineart[1]}`}
-              alt={`${selectedLineart[2]} full line art and sketch`}
-            />
-          </article>
-        )}
       </section>
 
       <section className="social-wall section-pad" id="social">
@@ -759,7 +675,7 @@ const PortfolioShowcase = () => {
             >
               <PortfolioImage src={post.src} alt={`${post.title} preview`} />
               <div>
-                <span>{post.platform}</span>
+                <span>ArtStation</span>
                 <h3>{post.title}</h3>
                 <ArrowUpRight />
               </div>
@@ -819,8 +735,8 @@ const PortfolioShowcase = () => {
             <h3>Production across PC, mobile and browser games.</h3>
             <ul>
               <li>
-                <strong>GAMETEQ · 2024—July 2026</strong>
-                <span>2D production art and visual development.</span>
+                <strong>GAMETEQ · January 2024—July 2026</strong>
+                <span>2D Artist · Full-time · Tbilisi, Georgia · Hybrid</span>
               </li>
               <li>
                 <strong>DEFU Games · 2020—2023</strong>
@@ -869,6 +785,232 @@ const PortfolioShowcase = () => {
         </div>
       </section>
 
+      <section className="sketchbook section-pad" id="sketchbook">
+        <Reveal className="sketchbook-intro">
+          <div>
+            <p className="eyebrow">Notes from the margins</p>
+            <h2>Sketchbook</h2>
+          </div>
+          <p>Small studies, kept deliberately quiet at the edge of the finished work.</p>
+        </Reveal>
+        <div className="sketch-grid">
+          {sketches.map(([src, title]) => (
+            <figure className="sketch-card reveal" key={src}>
+              <PortfolioImage src={`/portfolio/sketchbook/${src}`} alt={title} />
+              <figcaption>{title}</figcaption>
+            </figure>
+          ))}
+        </div>
+      </section>
+
+      <section className="featured-work" id="featured">
+        <article className="feature feature-wide reveal">
+          <div className="feature-media">
+            <PortfolioImage
+              src="/portfolio/therizina-final-web.webp"
+              alt="Two colourful therizinosaurs in a jungle"
+            />
+          </div>
+          <div className="feature-meta">
+            <p>Creature illustration · Fan art</p>
+            <h2>Therizinosaurus</h2>
+            <span>Colour, atmosphere and creature storytelling</span>
+          </div>
+        </article>
+
+        {SHOW_COLE_TURNER && (
+          <div className="feature-grid feature-grid-solo section-pad">
+            <article className="feature feature-square feature-solo reveal">
+              <div className="feature-media">
+                <PortfolioImage
+                  src="/portfolio/cole-turner-web.webp"
+                  alt="Portrait illustration of Cole Turner"
+                />
+              </div>
+              <div className="feature-meta">
+                <p>Portrait · Fan art</p>
+                <h3>Cole Turner</h3>
+                <span>Shape, likeness and controlled colour.</span>
+              </div>
+            </article>
+          </div>
+        )}
+      </section>
+
+      <section className="kcd-case section-pad" id="key-art">
+        <Reveal className="section-intro kcd-intro">
+          <p className="eyebrow">Key art / Kingdom Come: Deliverance</p>
+          <h2>Flower field</h2>
+        </Reveal>
+        <figure className="kcd-hero reveal">
+          <button
+            className="artwork-preview"
+            type="button"
+            onClick={() =>
+              setSelectedArtwork({
+                src: "/portfolio/kcd/flowerfield-final.webp",
+                alt: "Two medieval characters in a flower field",
+                title: "Flower field",
+              })
+            }
+            aria-label="Open Flower field full size"
+          >
+            <PortfolioImage
+              src="/portfolio/kcd/flowerfield-final-preview.webp"
+              alt="Two medieval characters in a flower field"
+            />
+            <span>
+              View full artwork <ArrowUpRight />
+            </span>
+          </button>
+          <figcaption>Final illustration</figcaption>
+        </figure>
+        <div className="kcd-process">
+          {[
+            ["flowerfield-blockout.webp", "3D blockout"],
+            ["flowerfield-paintover.webp", "Paintover"],
+            ["flowerfield-henry.webp", "Character detail / Henry"],
+            ["flowerfield-ptacek.webp", "Character detail / Hans"],
+          ].map(([src, title]) => (
+            <figure className="reveal" key={src}>
+              <PortfolioImage
+                src={`/portfolio/kcd/${src.replace(".webp", "-preview.webp")}`}
+                alt={title}
+              />
+              <figcaption>{title}</figcaption>
+            </figure>
+          ))}
+        </div>
+      </section>
+
+      {SHOW_RASPBERRY_PROCESS && <ProcessCase />}
+
+      <section className="gaz-case section-pad" id="gaz-station">
+        <Reveal className="gaz-heading">
+          <div>
+            <p className="eyebrow">3D environment / Blender</p>
+            <h2>
+              Midnight
+              <br />
+              fuel stop.
+            </h2>
+          </div>
+          <div className="gaz-summary">
+            <p>
+              A real-world station rebuilt as a cinematic winter environment — from architectural
+              reference and modular modelling to materials, lighting and final atmosphere.
+            </p>
+            <a
+              className="gaz-location"
+              href="https://maps.app.goo.gl/zLTAu8trPcm9G9558"
+              target="_blank"
+              rel="noreferrer"
+            >
+              <MapPin /> Real location reference <ArrowUpRight />
+            </a>
+            <ul aria-label="Project disciplines">
+              <li>Environment design</li>
+              <li>Modelling & texturing</li>
+              <li>Lighting & look development</li>
+            </ul>
+          </div>
+        </Reveal>
+
+        <figure className="gaz-hero reveal">
+          <PortfolioImage
+            src="/portfolio/gaz-station/final.webp"
+            alt="Cinematic 3D gas station at night in snow"
+          />
+          <figcaption>
+            <span>01</span> Final frame / night lighting
+          </figcaption>
+        </figure>
+
+        <div className="gaz-process-film">
+          <CinematicVideo
+            src="/portfolio/motion/anime-pipeline.mp4"
+            label="Storyboards to final frame"
+            index="02"
+          />
+        </div>
+      </section>
+
+      <section className="motion-case section-pad" id="motion">
+        <div className="motion-copy reveal">
+          <p className="eyebrow">Process in motion</p>
+          <h2>A painting is a sequence of decisions.</h2>
+          <p>Watch the image move from broad structure to light, colour and final detail.</p>
+        </div>
+        <div className="motion-gallery reveal">
+          <div className="motion-carousel-window">
+            <div
+              className="motion-carousel-track"
+              style={{ transform: `translateX(-${motionSlide * 100}%)` }}
+            >
+              <div className="motion-slide" aria-hidden={motionSlide !== 0}>
+                <CinematicVideo
+                  src="/portfolio/ksok-process.mp4"
+                  label="Process film / KSOK"
+                  index="01"
+                />
+              </div>
+              <div className="motion-slide" aria-hidden={motionSlide !== 1}>
+                <button
+                  className="motion-artwork-preview artwork-preview"
+                  type="button"
+                  onClick={() =>
+                    setSelectedArtwork({
+                      src: "/portfolio/ksok2.webp",
+                      alt: "Two men resting in a sunlit meadow",
+                      title: "KSOK — final artwork",
+                    })
+                  }
+                  aria-label="Open KSOK final artwork full size"
+                >
+                  <PortfolioImage
+                    src="/portfolio/ksok2-preview.webp"
+                    alt="Two men resting in a sunlit meadow"
+                  />
+                  <span>
+                    View full artwork <ArrowUpRight />
+                  </span>
+                </button>
+              </div>
+            </div>
+          </div>
+          <div className="motion-pagination" role="tablist" aria-label="Process gallery pages">
+            {["Process video", "Final artwork"].map((label, index) => (
+              <button
+                type="button"
+                className={motionSlide === index ? "active" : ""}
+                onClick={() => setMotionSlide(index)}
+                role="tab"
+                aria-selected={motionSlide === index}
+                aria-label={`Show ${label.toLowerCase()}`}
+                key={label}
+              >
+                <span />
+              </button>
+            ))}
+            <p>{motionSlide === 0 ? "Process video" : "Final artwork · tap to enlarge"}</p>
+          </div>
+        </div>
+      </section>
+
+      <section className="red-interlude">
+        <div className="red-copy reveal">
+          <p className="eyebrow">Kingdom Come: Deliverance II / portrait studies</p>
+          <h2>From actors to characters.</h2>
+        </div>
+        <div className="red-portraits">
+          <PortfolioImage src="/portfolio/henry-2-web.webp" alt="Red monochrome male portrait" />
+          <PortfolioImage
+            src="/portfolio/henry-3-web.webp"
+            alt="Second red monochrome male portrait"
+          />
+        </div>
+      </section>
+
       <section className="support-block section-pad" id="support">
         <PortfolioImage
           src="/portfolio/kcd/flowerfield-final.webp"
@@ -888,24 +1030,6 @@ const PortfolioShowcase = () => {
         </Reveal>
       </section>
 
-      <section className="sketchbook section-pad" id="sketchbook">
-        <Reveal className="sketchbook-intro">
-          <div>
-            <p className="eyebrow">Notes from the margins</p>
-            <h2>Sketchbook</h2>
-          </div>
-          <p>Small studies, kept deliberately quiet at the edge of the finished work.</p>
-        </Reveal>
-        <div className="sketch-grid">
-          {sketches.slice(0, 6).map(([src, title]) => (
-            <figure className="sketch-card reveal" key={src}>
-              <PortfolioImage src={`/portfolio/sketchbook/${src}`} alt={title} />
-              <figcaption>{title}</figcaption>
-            </figure>
-          ))}
-        </div>
-      </section>
-
       <section className="contact section-pad" id="contact">
         <div className="contact-main reveal">
           <p className="eyebrow">Available for selected projects</p>
@@ -914,10 +1038,15 @@ const PortfolioShowcase = () => {
             <br />
             to draw?
           </h2>
-          <a href={`mailto:${profile.email}`}>
-            {profile.email}
+          <button
+            className="protected-email"
+            type="button"
+            onClick={handleProtectedEmail}
+            aria-label={emailRevealed ? "Write an email to Fira" : "Reveal Fira's email address"}
+          >
+            <span aria-live="polite">{emailRevealed ? readContactEmail() : "Reveal email"}</span>
             <ArrowUpRight />
-          </a>
+          </button>
         </div>
       </section>
 
@@ -1081,64 +1210,25 @@ const PortfolioShowcase = () => {
             </div>
           </details>
         </div>
-
-        <div className="beyond section-pad closer-chapter">
-          <Reveal className="section-intro horizontal">
-            <div>
-              <p className="eyebrow">Experiments</p>
-              <h2>Beyond 2D</h2>
-            </div>
-            <p>Scenes, materials and small animated environments made for curiosity.</p>
-          </Reveal>
-          <div className="beyond-grid">
-            <figure className="reveal beyond-anime">
-              <video
-                data-src="/portfolio/motion/anime-pipeline.mp4"
-                muted
-                loop
-                playsInline
-                preload="none"
-                data-autoplay
-                aria-label="Anime production pipeline"
-                onTimeUpdate={(event) => {
-                  if (event.currentTarget.currentTime > 3) event.currentTarget.currentTime = 0;
-                }}
-              />
-              <figcaption>Anime pipeline / storyboard → key frame → post FX</figcaption>
-            </figure>
-            <figure className="reveal">
-              <PortfolioImage
-                src="/portfolio/halloween-scene-web.webp"
-                alt="Halloween still life scene with pumpkins, candles and a cat"
-              />
-              <figcaption>Halloween scene / lighting & materials</figcaption>
-            </figure>
-            <figure className="reveal">
-              <video
-                data-src="/portfolio/motion/pixel-kitchen.mp4"
-                muted
-                loop
-                playsInline
-                preload="none"
-                data-autoplay
-                aria-label="Animated pixel-art kitchen"
-              />
-              <figcaption>Pixel-art game environment / animated kitchen</figcaption>
-            </figure>
-            <article className="browser-game reveal">
-              <p className="eyebrow">Interactive fiction</p>
-              <h3>A browser game built from words and choices.</h3>
-              <span>Preview coming soon</span>
-            </article>
-          </div>
-        </div>
       </section>
 
       <footer className="site-footer section-pad">
-        <div className="contact-bottom">
-          <p>
-            <MapPin /> Tbilisi, Georgia
-          </p>
+        <div className="footer-lead">
+          <a className="footer-brand" href="#home" aria-label="Back to the top">
+            Fira <span>CG</span>
+          </a>
+          <p>2D artist & visual generalist · Tbilisi, Georgia</p>
+          <button
+            className="footer-email protected-email"
+            type="button"
+            onClick={handleProtectedEmail}
+            aria-label={emailRevealed ? "Write an email to Fira" : "Reveal Fira's email address"}
+          >
+            <span aria-live="polite">{emailRevealed ? readContactEmail() : "Reveal email"}</span>
+            <ArrowUpRight />
+          </button>
+        </div>
+        <div className="footer-bottom">
           <nav aria-label="Social links">
             <a href={social.artstation} target="_blank" rel="noreferrer">
               ArtStation
@@ -1152,16 +1242,38 @@ const PortfolioShowcase = () => {
             <a href={social.telegram} target="_blank" rel="noreferrer">
               Telegram
             </a>
-            <a className="secondary-social" href={social.behance} target="_blank" rel="noreferrer">
-              Behance
-            </a>
-            <a href={`mailto:${profile.email}`}>
-              <Mail /> Email
-            </a>
           </nav>
-          <span>© {new Date().getFullYear()} Fira CG</span>
+          <span>© {new Date().getFullYear()} Fira CG · All artwork rights reserved</span>
         </div>
       </footer>
+
+      {selectedArtwork && (
+        <div
+          className="artwork-lightbox"
+          role="dialog"
+          aria-modal="true"
+          aria-label={selectedArtwork.title}
+        >
+          <button
+            className="artwork-lightbox-backdrop"
+            type="button"
+            onClick={() => setSelectedArtwork(null)}
+            aria-label="Close full-size artwork"
+          />
+          <div className="artwork-lightbox-content">
+            <button
+              className="artwork-lightbox-close"
+              type="button"
+              onClick={() => setSelectedArtwork(null)}
+              aria-label="Close full-size artwork"
+            >
+              <X />
+            </button>
+            <PortfolioImage src={selectedArtwork.src} alt={selectedArtwork.alt} loading="eager" />
+            <p>{selectedArtwork.title}</p>
+          </div>
+        </div>
+      )}
 
       <aside
         className={`nyanchi-helper ${nyanchiOpen ? "is-open" : ""} ${nyanchiQuiet ? "is-quiet" : ""}`}
@@ -1194,7 +1306,13 @@ const PortfolioShowcase = () => {
               <br />
               Leave Fira a message.
             </p>
-            <form action="https://formsubmit.co/firacgi@gmail.com" method="POST">
+            <form
+              action="https://formsubmit.co/"
+              method="POST"
+              onSubmit={(event) => {
+                event.currentTarget.action = `https://formsubmit.co/${readContactEmail()}`;
+              }}
+            >
               <input type="hidden" name="_subject" value="Portfolio message via Nyanchi" />
               <input type="hidden" name="_captcha" value="false" />
               <label>
@@ -1217,6 +1335,10 @@ const PortfolioShowcase = () => {
               <button type="submit">
                 <Send /> Send message
               </button>
+              <small className="form-privacy">
+                Your name, reply email and message are sent through FormSubmit only so Fira can
+                answer your enquiry. Do not include sensitive information.
+              </small>
             </form>
             <a className="nyanchi-telegram" href={social.telegram} target="_blank" rel="noreferrer">
               <Send /> Or message @firacg
@@ -1258,8 +1380,16 @@ const PortfolioShowcase = () => {
           </button>
           <button
             className="nyanchi-pet"
-            onClick={() => playNyanchi("nose")}
-            aria-label="Poke Nyanchi's nose"
+            onClick={() => {
+              if (nyanchiQuiet) {
+                setNyanchiOpen(true);
+                return;
+              }
+              playNyanchi("nose");
+            }}
+            aria-label={
+              nyanchiQuiet ? "Restore Nyanchi and open contact form" : "Poke Nyanchi's nose"
+            }
           >
             <PortfolioImage
               src={nyanchiImage}
