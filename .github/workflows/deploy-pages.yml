@@ -35,6 +35,7 @@ jobs:
         env:
           NITRO_PRESET: node-server
           NITRO_APP_BASE_URL: /
+          VITE_CONTACT_API_URL: ${{ vars.CONTACT_API_URL }}
 
       - name: Render the home page
         shell: bash

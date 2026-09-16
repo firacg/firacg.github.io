@@ -19,6 +19,7 @@ const contactEmailCodes = [
 ];
 
 const readContactEmail = () => String.fromCharCode(...contactEmailCodes);
+const contactApiUrl = import.meta.env.VITE_CONTACT_API_URL?.trim();
 
 const stages = [
   { src: "/portfolio/raspberry-01-line.png", label: "Line" },
@@ -362,6 +363,8 @@ const PortfolioShowcase = () => {
   const [motionSlide, setMotionSlide] = useState(0);
   const [nyanchiQuiet, setNyanchiQuiet] = useState(false);
   const [emailRevealed, setEmailRevealed] = useState(false);
+  const [contactStatus, setContactStatus] = useState<"idle" | "sending" | "sent" | "error">("idle");
+  const [contactError, setContactError] = useState("");
   const [nyanchiFrame, setNyanchiFrame] = useState(1);
   const [nyanchiAction, setNyanchiAction] = useState<
     "idle" | "eat" | "call" | "nose" | "drink" | "play"
@@ -1307,14 +1310,50 @@ const PortfolioShowcase = () => {
               Leave Fira a message.
             </p>
             <form
-              action="https://formsubmit.co/"
-              method="POST"
-              onSubmit={(event) => {
-                event.currentTarget.action = `https://formsubmit.co/${readContactEmail()}`;
+              onSubmit={async (event) => {
+                event.preventDefault();
+                const form = event.currentTarget;
+                const formData = new FormData(form);
+
+                setContactStatus("sending");
+                setContactError("");
+
+                if (!contactApiUrl) {
+                  setContactStatus("error");
+                  setContactError(
+                    "Telegram contact is temporarily unavailable. Please use the link below.",
+                  );
+                  return;
+                }
+
+                try {
+                  const response = await fetch(contactApiUrl, {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({
+                      name: formData.get("name"),
+                      email: formData.get("email"),
+                      message: formData.get("message"),
+                      company: formData.get("company"),
+                    }),
+                  });
+
+                  if (!response.ok) throw new Error("Message delivery failed");
+
+                  form.reset();
+                  setContactStatus("sent");
+                } catch {
+                  setContactStatus("error");
+                  setContactError(
+                    "The message could not be sent. Please try again or use Telegram below.",
+                  );
+                }
               }}
             >
-              <input type="hidden" name="_subject" value="Portfolio message via Nyanchi" />
-              <input type="hidden" name="_captcha" value="false" />
+              <label className="contact-honeypot" aria-hidden="true">
+                Company
+                <input name="company" tabIndex={-1} autoComplete="off" />
+              </label>
               <label>
                 Name
                 <input name="name" required placeholder="Your name" />
@@ -1332,12 +1371,22 @@ const PortfolioShowcase = () => {
                   placeholder="Tell me about your project…"
                 />
               </label>
-              <button type="submit">
-                <Send /> Send message
+              <button type="submit" disabled={contactStatus === "sending"}>
+                <Send /> {contactStatus === "sending" ? "Sending…" : "Send to Telegram"}
               </button>
+              {contactStatus === "sent" && (
+                <p className="form-status is-success" role="status">
+                  Message sent. Fira will reply to the email you provided.
+                </p>
+              )}
+              {contactStatus === "error" && (
+                <p className="form-status is-error" role="alert">
+                  {contactError}
+                </p>
+              )}
               <small className="form-privacy">
-                Your name, reply email and message are sent through FormSubmit only so Fira can
-                answer your enquiry. Do not include sensitive information.
+                Your name, reply email and message are delivered privately to Fira in Telegram so
+                she can answer your enquiry. Do not include sensitive information.
               </small>
             </form>
             <a className="nyanchi-telegram" href={social.telegram} target="_blank" rel="noreferrer">

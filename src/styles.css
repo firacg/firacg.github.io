@@ -2518,6 +2518,14 @@ main > footer {
   display: grid;
   gap: 0.7rem;
 }
+.contact-honeypot {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
 .nyanchi-card label {
   display: grid;
   gap: 0.35rem;
@@ -2557,6 +2565,22 @@ main > footer {
     700 0.62rem/1 "DM Mono",
     monospace;
   text-transform: uppercase;
+}
+.nyanchi-card form button:disabled {
+  cursor: wait;
+  opacity: 0.65;
+}
+.form-status {
+  margin: 0 !important;
+  padding: 0.7rem;
+  border: 1px solid currentColor;
+  font: 0.7rem/1.45 "Manrope", sans-serif;
+}
+.form-status.is-success {
+  color: #d6ff3f;
+}
+.form-status.is-error {
+  color: #ff9e9e;
 }
 .form-privacy {
   color: #8e8a91;

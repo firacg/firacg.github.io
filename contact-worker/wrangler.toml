@@ -1,0 +1,6 @@
+name = "firacg-contact"
+main = "src/index.ts"
+compatibility_date = "2026-09-01"
+
+[vars]
+ALLOWED_ORIGIN = "https://firacg.github.io"
