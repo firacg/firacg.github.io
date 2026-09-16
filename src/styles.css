@@ -253,6 +253,8 @@ main > footer {
     800 1.15rem/1 "Syne",
     sans-serif;
   letter-spacing: -0.05em;
+  color: inherit;
+  text-decoration: none;
 }
 .site-mark span {
   color: #ff0045;

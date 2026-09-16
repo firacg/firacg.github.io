@@ -34,6 +34,14 @@ const Navigation = ({ onContactClick }: { onContactClick: () => void }) => {
     document.querySelector(href)?.scrollIntoView({ behavior: "smooth" });
   };
 
+  const handleLogoClick = (event: React.MouseEvent<HTMLAnchorElement>) => {
+    setIsOpen(false);
+    if (location.pathname === "/") {
+      event.preventDefault();
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    }
+  };
+
   return (
     <nav
       className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
@@ -43,9 +51,9 @@ const Navigation = ({ onContactClick }: { onContactClick: () => void }) => {
       <div className="max-w-7xl mx-auto px-6">
         <div className="flex items-center justify-between h-16">
           {/* Logo */}
-          <div className="site-mark">
+          <a href="/" className="site-mark" aria-label="FIRA CG — back to top" onClick={handleLogoClick}>
             FIRA<span>CG</span>
-          </div>
+          </a>
 
           {/* Desktop Navigation */}
           <div className="hidden md:flex items-center space-x-8 nav-links">
