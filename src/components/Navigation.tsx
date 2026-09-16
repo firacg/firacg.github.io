@@ -4,13 +4,13 @@ import { Button } from "@/components/ui/button";
 import { Menu, X } from "lucide-react";
 
 const navItems = [
-  { name: "Work", href: "#selected" },
-  { name: "Process", href: "#process" },
   { name: "Line art", href: "#lineart" },
-  { name: "About", href: "#about" },
+  { name: "Plarium", href: "#plarium" },
+  { name: "CV", href: "/downloads/Fira-CG-CV.pdf", download: true },
+  { name: "Sketchbook", href: "#sketchbook" },
 ];
 
-const Navigation = () => {
+const Navigation = ({ onContactClick }: { onContactClick: () => void }) => {
   const [isOpen, setIsOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
   const navigate = useNavigate();
@@ -27,10 +27,6 @@ const Navigation = () => {
 
   const scrollToSection = (href: string) => {
     setIsOpen(false);
-    if (href.startsWith("/")) {
-      navigate({ to: href });
-      return;
-    }
     if (location.pathname !== "/") {
       navigate({ to: "/", hash: href.slice(1) });
       return;
@@ -53,20 +49,19 @@ const Navigation = () => {
 
           {/* Desktop Navigation */}
           <div className="hidden md:flex items-center space-x-8 nav-links">
-            {navItems.map((item) => (
-              <button
-                key={item.name}
-                onClick={() => scrollToSection(item.href)}
-                className="text-foreground hover:text-primary transition-colors duration-300 font-medium"
-              >
-                {item.name}
-              </button>
-            ))}
+            {navItems.map((item) =>
+              item.download ? (
+                <a key={item.name} href={item.href} download>
+                  {item.name}
+                </a>
+              ) : (
+                <button key={item.name} onClick={() => scrollToSection(item.href)}>
+                  {item.name}
+                </button>
+              ),
+            )}
           </div>
-          <button
-            className="nav-contact hidden md:inline-flex"
-            onClick={() => scrollToSection("#contact")}
-          >
+          <button className="nav-contact hidden md:inline-flex" onClick={onContactClick}>
             Let’s talk
           </button>
 
@@ -91,15 +86,36 @@ const Navigation = () => {
             id="mobile-navigation"
           >
             <div className="px-4 pt-2 pb-4 space-y-2">
-              {navItems.map((item) => (
-                <button
-                  key={item.name}
-                  onClick={() => scrollToSection(item.href)}
-                  className="block w-full text-left px-4 py-2 text-foreground hover:text-primary hover:bg-primary/10 rounded-md transition-all duration-300"
-                >
-                  {item.name}
-                </button>
-              ))}
+              {navItems.map((item) =>
+                item.download ? (
+                  <a
+                    key={item.name}
+                    href={item.href}
+                    download
+                    onClick={() => setIsOpen(false)}
+                    className="block w-full text-left px-4 py-2 text-foreground hover:text-primary hover:bg-primary/10 rounded-md transition-all duration-300"
+                  >
+                    {item.name}
+                  </a>
+                ) : (
+                  <button
+                    key={item.name}
+                    onClick={() => scrollToSection(item.href)}
+                    className="block w-full text-left px-4 py-2 text-foreground hover:text-primary hover:bg-primary/10 rounded-md transition-all duration-300"
+                  >
+                    {item.name}
+                  </button>
+                ),
+              )}
+              <button
+                onClick={() => {
+                  setIsOpen(false);
+                  onContactClick();
+                }}
+                className="nav-contact mt-2 w-full justify-center"
+              >
+                Let’s talk
+              </button>
             </div>
           </div>
         )}

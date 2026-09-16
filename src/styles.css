@@ -258,12 +258,20 @@ main > footer {
   color: #ff0045;
   margin-left: 0.18rem;
 }
-.nav-links button {
+.nav-links button,
+.nav-links a {
   font:
     500 0.72rem/1 "DM Mono",
     monospace;
   letter-spacing: 0.08em;
   text-transform: uppercase;
+  transition: color 0.2s ease;
+}
+.nav-links button:hover,
+.nav-links button:focus-visible,
+.nav-links a:hover,
+.nav-links a:focus-visible {
+  color: #ff6b93;
 }
 .nav-contact {
   align-items: center;
@@ -440,7 +448,7 @@ main > footer {
 .scroll-cue {
   position: absolute;
   z-index: 2;
-  right: clamp(1.25rem, 4vw, 4rem);
+  right: clamp(11rem, 18vw, 16rem);
   bottom: 2.5rem;
   display: flex;
   gap: 0.7rem;
@@ -2301,20 +2309,22 @@ main > footer {
 .nyanchi-helper {
   position: fixed;
   z-index: 90;
-  right: 2.5rem;
-  bottom: 170px;
+  right: 1.25rem;
+  bottom: 5rem;
   display: flex;
   align-items: end;
   gap: 0.4rem;
-  transform-origin: right bottom;
-  transition:
-    right 0.35s ease,
-    bottom 0.35s ease,
-    transform 0.35s cubic-bezier(0.2, 0.75, 0.25, 1),
-    opacity 0.25s ease;
 }
 .nyanchi-stage {
   position: relative;
+  transform: scale(0.72);
+  transform-origin: right bottom;
+  transition: transform 0.25s cubic-bezier(0.2, 0.75, 0.25, 1);
+}
+.nyanchi-stage:hover,
+.nyanchi-stage:focus-within,
+.nyanchi-helper.is-engaged .nyanchi-stage {
+  transform: scale(1);
 }
 .nyanchi-actions {
   position: absolute;
@@ -2332,6 +2342,7 @@ main > footer {
 }
 .nyanchi-stage:hover .nyanchi-actions,
 .nyanchi-stage:focus-within .nyanchi-actions,
+.nyanchi-helper.is-engaged .nyanchi-actions,
 .nyanchi-helper.is-open .nyanchi-actions {
   opacity: 1;
   transform: translateX(-50%);
@@ -2451,33 +2462,50 @@ main > footer {
   transform: translate(-50%, 8px);
   pointer-events: none;
 }
-.nyanchi-helper.is-open {
-  right: 2.5rem;
-  bottom: 170px;
-  transform: none;
-  opacity: 1;
+.nyanchi-helper.is-collapsed .nyanchi-stage,
+.nyanchi-helper.is-collapsed .nyanchi-stage:hover,
+.nyanchi-helper.is-collapsed .nyanchi-stage:focus-within {
+  transform: scale(0.36);
+  pointer-events: none;
 }
-.nyanchi-helper.is-quiet:not(.is-open) {
-  right: 0.75rem;
-  bottom: 0.75rem;
-  transform: scale(0.48);
-  opacity: 0.9;
-}
-.nyanchi-helper.is-quiet:not(.is-open) .nyanchi-speech,
-.nyanchi-helper.is-quiet:not(.is-open) .nyanchi-actions {
+.nyanchi-helper.is-collapsed:not(.is-open) .nyanchi-speech,
+.nyanchi-helper.is-collapsed:not(.is-open) .nyanchi-actions {
   opacity: 0;
   pointer-events: none;
 }
-.nyanchi-helper.is-quiet:not(.is-open) .nyanchi-pet {
-  border-radius: 0;
-  background: transparent;
-  box-shadow: none;
-  backdrop-filter: none;
+.nyanchi-toggle {
+  position: absolute;
+  z-index: 6;
+  right: -0.4rem;
+  bottom: 5.3rem;
+  display: grid;
+  width: 2.4rem;
+  height: 2.4rem;
+  place-items: center;
+  border: 1px solid rgba(255, 255, 255, 0.45);
+  border-radius: 50%;
+  background: #19191c;
+  color: #d6ff3f;
+  box-shadow: 0 4px 18px rgba(0, 0, 0, 0.45);
+  transition: background 0.2s ease, transform 0.2s ease;
 }
-.nyanchi-helper.is-quiet:not(.is-open):hover,
-.nyanchi-helper.is-quiet:not(.is-open):focus-within {
-  transform: scale(0.62);
-  opacity: 1;
+.nyanchi-toggle:hover,
+.nyanchi-toggle:focus-visible {
+  background: #303038;
+  transform: scale(1.08);
+  outline: 2px solid #d6ff3f;
+  outline-offset: 2px;
+}
+.nyanchi-toggle svg {
+  width: 1.2rem;
+  height: 1.2rem;
+}
+.nyanchi-helper.is-collapsed .nyanchi-toggle {
+  bottom: 2.3rem;
+}
+.nyanchi-helper.is-open .nyanchi-toggle {
+  opacity: 0;
+  pointer-events: none;
 }
 .nyanchi-pet svg {
   width: 0.8rem;
@@ -2880,11 +2908,32 @@ main > footer {
     flex-direction: column;
   }
   .nyanchi-helper {
-    display: none;
+    right: 0.4rem;
+    bottom: 4.2rem;
+  }
+  .nyanchi-stage {
+    transform: scale(0.56);
+  }
+  .nyanchi-stage:hover,
+  .nyanchi-stage:focus-within,
+  .nyanchi-helper.is-engaged .nyanchi-stage {
+    transform: scale(0.82);
+  }
+  .nyanchi-helper.is-collapsed .nyanchi-stage,
+  .nyanchi-helper.is-collapsed .nyanchi-stage:hover,
+  .nyanchi-helper.is-collapsed .nyanchi-stage:focus-within {
+    transform: scale(0.3);
+  }
+  .nyanchi-toggle {
+    right: 0;
+    bottom: 3.2rem;
+  }
+  .nyanchi-helper.is-collapsed .nyanchi-toggle {
+    bottom: 1.8rem;
   }
   .nyanchi-actions {
     opacity: 1;
-    left: 50%;
+    left: 35%;
     right: auto;
     bottom: -92px;
     padding-inline: 0;
@@ -2924,7 +2973,7 @@ main > footer {
   }
   .nyanchi-speech {
     top: -1.35rem;
-    left: 50%;
+    left: 30%;
     right: auto;
     width: 210px;
     min-height: 100px;

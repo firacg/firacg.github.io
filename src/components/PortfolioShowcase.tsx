@@ -2,6 +2,8 @@ import { Fragment, useEffect, useRef, useState } from "react";
 import {
   ArrowDownRight,
   ArrowUpRight,
+  ChevronLeft,
+  ChevronRight,
   Download,
   Instagram,
   Linkedin,
@@ -14,11 +16,6 @@ import {
 } from "lucide-react";
 import { payments, social } from "@/data/profile";
 
-const contactEmailCodes = [
-  102, 105, 114, 97, 99, 103, 105, 64, 103, 109, 97, 105, 108, 46, 99, 111, 109,
-];
-
-const readContactEmail = () => String.fromCharCode(...contactEmailCodes);
 const contactApiUrl = import.meta.env.VITE_CONTACT_API_URL?.trim();
 
 const stages = [
@@ -58,7 +55,6 @@ const heroSocials = [
   { label: "ArtStation", href: social.artstation, icon: Palette },
   { label: "Instagram", href: social.instagram, icon: Instagram },
   { label: "LinkedIn", href: social.linkedin, icon: Linkedin },
-  { label: "Telegram", href: social.telegram, icon: Send },
 ];
 
 const socialPosts = [
@@ -352,17 +348,22 @@ function ProcessCase() {
   );
 }
 
-const PortfolioShowcase = () => {
+const PortfolioShowcase = ({
+  nyanchiOpen,
+  setNyanchiOpen,
+}: {
+  nyanchiOpen: boolean;
+  setNyanchiOpen: React.Dispatch<React.SetStateAction<boolean>>;
+}) => {
   const [selectedLineart, setSelectedLineart] = useState<(typeof lineart)[number] | null>(null);
   const [selectedArtwork, setSelectedArtwork] = useState<{
     src: string;
     alt: string;
     title: string;
   } | null>(null);
-  const [nyanchiOpen, setNyanchiOpen] = useState(false);
   const [motionSlide, setMotionSlide] = useState(0);
-  const [nyanchiQuiet, setNyanchiQuiet] = useState(false);
-  const [emailRevealed, setEmailRevealed] = useState(false);
+  const [nyanchiCollapsed, setNyanchiCollapsed] = useState(false);
+  const [nyanchiEngaged, setNyanchiEngaged] = useState(false);
   const [contactStatus, setContactStatus] = useState<"idle" | "sending" | "sent" | "error">("idle");
   const [contactError, setContactError] = useState("");
   const [nyanchiFrame, setNyanchiFrame] = useState(1);
@@ -384,7 +385,7 @@ const PortfolioShowcase = () => {
       document.body.style.overflow = previousOverflow;
       window.removeEventListener("keydown", closeOnEscape);
     };
-  }, [nyanchiOpen]);
+  }, [nyanchiOpen, setNyanchiOpen]);
 
   useEffect(() => {
     const observer = new IntersectionObserver(
@@ -421,51 +422,6 @@ const PortfolioShowcase = () => {
   }, []);
 
   useEffect(() => {
-    if (nyanchiOpen) {
-      setNyanchiQuiet(false);
-      return;
-    }
-
-    const artwork = Array.from(
-      document.querySelectorAll<HTMLElement>(
-        ".feature-media, .kcd-hero, .process-stage, .gaz-hero, .gaz-sequence, .motion-gallery, .object-row, .red-portraits, .lineart-track, .lineart-expanded",
-      ),
-    );
-    let frame = 0;
-
-    const updateNyanchiMode = () => {
-      window.cancelAnimationFrame(frame);
-      frame = window.requestAnimationFrame(() => {
-        const safeZone = {
-          left: window.innerWidth - Math.min(390, window.innerWidth * 0.34),
-          right: window.innerWidth,
-          top: window.innerHeight - Math.min(470, window.innerHeight * 0.58),
-          bottom: window.innerHeight,
-        };
-        const overlapsArtwork = artwork.some((element) => {
-          const rect = element.getBoundingClientRect();
-          return (
-            rect.right > safeZone.left &&
-            rect.left < safeZone.right &&
-            rect.bottom > safeZone.top &&
-            rect.top < safeZone.bottom
-          );
-        });
-        setNyanchiQuiet(overlapsArtwork);
-      });
-    };
-
-    updateNyanchiMode();
-    window.addEventListener("scroll", updateNyanchiMode, { passive: true });
-    window.addEventListener("resize", updateNyanchiMode);
-    return () => {
-      window.cancelAnimationFrame(frame);
-      window.removeEventListener("scroll", updateNyanchiMode);
-      window.removeEventListener("resize", updateNyanchiMode);
-    };
-  }, [nyanchiOpen]);
-
-  useEffect(() => {
     const lengths = { idle: 8, eat: 16, call: 8, nose: 12, drink: 16, play: 12 };
     const animation = window.setInterval(
       () =>
@@ -484,14 +440,6 @@ const PortfolioShowcase = () => {
   const playNyanchi = (action: "eat" | "call" | "nose" | "drink" | "play") => {
     setNyanchiFrame(1);
     setNyanchiAction(action);
-  };
-
-  const handleProtectedEmail = () => {
-    if (!emailRevealed) {
-      setEmailRevealed(true);
-      return;
-    }
-    window.location.href = `mailto:${readContactEmail()}`;
   };
 
   const nyanchiImage = (() => {
@@ -571,35 +519,9 @@ const PortfolioShowcase = () => {
             </a>
           ))}
         </nav>
-        <a className="scroll-cue" href="#selected">
+        <a className="scroll-cue" href="#lineart">
           Selected work <ArrowDownRight />
         </a>
-      </section>
-
-      <section className="manifesto section-pad" id="selected">
-        <div className="manifesto-hologram" aria-hidden="true">
-          <div className="manifesto-card">
-            <div className="manifesto-card-face manifesto-card-front">
-              <PortfolioImage src="/portfolio/terezina/therezina-card-front.webp" alt="" />
-            </div>
-            <div className="manifesto-card-face manifesto-card-back">
-              <PortfolioImage src="/portfolio/terezina/therezina-card-back.webp" alt="" />
-            </div>
-          </div>
-        </div>
-        <Reveal>
-          <p className="eyebrow">What I do</p>
-          <div className="manifesto-copy">
-            <p>Production art pipelines,</p>
-            <p>Expressive characters, atmosphere, readable emotions and game-ready visuals.</p>
-          </div>
-        </Reveal>
-        <div className="capabilities reveal" aria-label="Jump to a discipline">
-          <a href="#featured">Character design</a>
-          <a href="#key-art">Key art</a>
-          <a href="#objects">Props & items</a>
-          <a href="#gaz-station">Visual development</a>
-        </div>
       </section>
 
       <section className="lineart-section section-pad" id="lineart">
@@ -657,11 +579,11 @@ const PortfolioShowcase = () => {
         </div>
       </section>
 
-      <section className="social-wall section-pad" id="social">
+      <section className="social-wall section-pad" id="plarium">
         <Reveal className="section-intro horizontal">
           <div>
-            <p className="eyebrow">Around the web</p>
-            <h2>Follow the work</h2>
+            <p className="eyebrow">Game art / selected posts</p>
+            <h2>Plarium & beyond</h2>
           </div>
           <p>
             Open the original posts to see current reactions, comments and full-resolution details.
@@ -803,6 +725,32 @@ const PortfolioShowcase = () => {
               <figcaption>{title}</figcaption>
             </figure>
           ))}
+        </div>
+      </section>
+
+      <section className="manifesto section-pad" id="selected">
+        <div className="manifesto-hologram" aria-hidden="true">
+          <div className="manifesto-card">
+            <div className="manifesto-card-face manifesto-card-front">
+              <PortfolioImage src="/portfolio/terezina/therezina-card-front.webp" alt="" />
+            </div>
+            <div className="manifesto-card-face manifesto-card-back">
+              <PortfolioImage src="/portfolio/terezina/therezina-card-back.webp" alt="" />
+            </div>
+          </div>
+        </div>
+        <Reveal>
+          <p className="eyebrow">What I do</p>
+          <div className="manifesto-copy">
+            <p>Production art pipelines,</p>
+            <p>Expressive characters, atmosphere, readable emotions and game-ready visuals.</p>
+          </div>
+        </Reveal>
+        <div className="capabilities reveal" aria-label="Jump to a discipline">
+          <a href="#featured">Character design</a>
+          <a href="#key-art">Key art</a>
+          <a href="#objects">Props & items</a>
+          <a href="#gaz-station">Visual development</a>
         </div>
       </section>
 
@@ -1041,13 +989,8 @@ const PortfolioShowcase = () => {
             <br />
             to draw?
           </h2>
-          <button
-            className="protected-email"
-            type="button"
-            onClick={handleProtectedEmail}
-            aria-label={emailRevealed ? "Write an email to Fira" : "Reveal Fira's email address"}
-          >
-            <span aria-live="polite">{emailRevealed ? readContactEmail() : "Reveal email"}</span>
+          <button className="protected-email" type="button" onClick={() => setNyanchiOpen(true)}>
+            <span>Send a message</span>
             <ArrowUpRight />
           </button>
         </div>
@@ -1224,10 +1167,9 @@ const PortfolioShowcase = () => {
           <button
             className="footer-email protected-email"
             type="button"
-            onClick={handleProtectedEmail}
-            aria-label={emailRevealed ? "Write an email to Fira" : "Reveal Fira's email address"}
+            onClick={() => setNyanchiOpen(true)}
           >
-            <span aria-live="polite">{emailRevealed ? readContactEmail() : "Reveal email"}</span>
+            <span>Send a message</span>
             <ArrowUpRight />
           </button>
         </div>
@@ -1241,9 +1183,6 @@ const PortfolioShowcase = () => {
             </a>
             <a href={social.linkedin} target="_blank" rel="noreferrer">
               LinkedIn
-            </a>
-            <a href={social.telegram} target="_blank" rel="noreferrer">
-              Telegram
             </a>
           </nav>
           <span>© {new Date().getFullYear()} Fira CG · All artwork rights reserved</span>
@@ -1279,7 +1218,7 @@ const PortfolioShowcase = () => {
       )}
 
       <aside
-        className={`nyanchi-helper ${nyanchiOpen ? "is-open" : ""} ${nyanchiQuiet ? "is-quiet" : ""}`}
+        className={`nyanchi-helper ${nyanchiOpen ? "is-open" : ""} ${nyanchiCollapsed ? "is-collapsed" : ""} ${nyanchiEngaged ? "is-engaged" : ""}`}
         aria-label="Nyanchi contact helper"
       >
         {nyanchiOpen && (
@@ -1321,7 +1260,7 @@ const PortfolioShowcase = () => {
                 if (!contactApiUrl) {
                   setContactStatus("error");
                   setContactError(
-                    "Telegram contact is temporarily unavailable. Please use the link below.",
+                    "The contact form is temporarily unavailable. Please try again later.",
                   );
                   return;
                 }
@@ -1344,9 +1283,7 @@ const PortfolioShowcase = () => {
                   setContactStatus("sent");
                 } catch {
                   setContactStatus("error");
-                  setContactError(
-                    "The message could not be sent. Please try again or use Telegram below.",
-                  );
+                  setContactError("The message could not be sent. Please try again later.");
                 }
               }}
             >
@@ -1372,7 +1309,7 @@ const PortfolioShowcase = () => {
                 />
               </label>
               <button type="submit" disabled={contactStatus === "sending"}>
-                <Send /> {contactStatus === "sending" ? "Sending…" : "Send to Telegram"}
+                <Send /> {contactStatus === "sending" ? "Sending…" : "Send message"}
               </button>
               {contactStatus === "sent" && (
                 <p className="form-status is-success" role="status">
@@ -1389,15 +1326,9 @@ const PortfolioShowcase = () => {
                 she can answer your enquiry. Do not include sensitive information.
               </small>
             </form>
-            <a className="nyanchi-telegram" href={social.telegram} target="_blank" rel="noreferrer">
-              <Send /> Or message @firacg
-            </a>
-            <a className="nyanchi-kofi" href={payments.kofi} target="_blank" rel="noreferrer">
-              Leave a coffee <ArrowUpRight />
-            </a>
           </div>
         )}
-        <div className="nyanchi-stage">
+        <div className="nyanchi-stage" inert={nyanchiCollapsed || nyanchiOpen}>
           <div className="nyanchi-actions" aria-label="Play with Nyanchi">
             <button onClick={() => playNyanchi("eat")} aria-label="Feed Nyanchi" title="Feed">
               <PortfolioImage src="/portfolio/nyanchi/ui-icons/eat_icon.png" alt="" />
@@ -1430,15 +1361,10 @@ const PortfolioShowcase = () => {
           <button
             className="nyanchi-pet"
             onClick={() => {
-              if (nyanchiQuiet) {
-                setNyanchiOpen(true);
-                return;
-              }
+              setNyanchiEngaged((engaged) => !engaged);
               playNyanchi("nose");
             }}
-            aria-label={
-              nyanchiQuiet ? "Restore Nyanchi and open contact form" : "Poke Nyanchi's nose"
-            }
+            aria-label={nyanchiEngaged ? "Make Nyanchi smaller" : "Make Nyanchi bigger"}
           >
             <PortfolioImage
               src={nyanchiImage}
@@ -1447,6 +1373,19 @@ const PortfolioShowcase = () => {
             />
           </button>
         </div>
+        <button
+          className="nyanchi-toggle"
+          type="button"
+          disabled={nyanchiOpen}
+          onClick={() => {
+            setNyanchiCollapsed((collapsed) => !collapsed);
+            setNyanchiEngaged(false);
+          }}
+          aria-label={nyanchiCollapsed ? "Expand Nyanchi helper" : "Collapse Nyanchi helper"}
+          aria-expanded={!nyanchiCollapsed}
+        >
+          {nyanchiCollapsed ? <ChevronLeft /> : <ChevronRight />}
+        </button>
       </aside>
     </main>
   );

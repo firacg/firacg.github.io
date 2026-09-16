@@ -1,4 +1,4 @@
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useLocation } from "@tanstack/react-router";
 import Navigation from "@/components/Navigation";
 import PortfolioShowcase from "@/components/PortfolioShowcase";
@@ -6,6 +6,7 @@ import PortfolioShowcase from "@/components/PortfolioShowcase";
 const IndexPage = () => {
   const location = useLocation();
   const handledInitialNavigation = useRef(false);
+  const [contactOpen, setContactOpen] = useState(false);
 
   useEffect(() => {
     if ("scrollRestoration" in history) {
@@ -35,8 +36,8 @@ const IndexPage = () => {
 
   return (
     <div className="min-h-screen bg-background text-foreground overflow-x-hidden">
-      <Navigation />
-      <PortfolioShowcase />
+      <Navigation onContactClick={() => setContactOpen(true)} />
+      <PortfolioShowcase nyanchiOpen={contactOpen} setNyanchiOpen={setContactOpen} />
     </div>
   );
 };

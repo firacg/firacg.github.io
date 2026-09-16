@@ -5,7 +5,6 @@ export const profile = {
   pitch: "I draw for game dev companies — characters, locations, props and items.",
   location: "Currently in Tbilisi, Georgia",
   languages: ["English", "Ukrainian", "Russian", "Japanese (elementary)"],
-  email: "firacgi@gmail.com",
   skills: ["Game Art", "Character Design", "Concept Development"],
   bio: "Painting is where I started, years at art college before games ever entered the picture. Since 2018 I've worked inside game studios — Nordcurrent, DEFU Games and GAMETEQ — taking characters from a rough thumbnail to a finished piece ready for production, on titles including Plarium's Throne: Kingdom at War and Vikings: War of Clans. Since July 2026 I have worked independently as a freelance 2D artist and visual generalist.",
 };
@@ -16,7 +15,6 @@ export const social = {
   behance: "https://www.behance.net/maboroshi94",
   linkedin: "https://www.linkedin.com/in/firacg/",
   tumblr: "https://www.tumblr.com/blog/firacgart",
-  telegram: "https://t.me/firacg",
 };
 
 export const payments = {
