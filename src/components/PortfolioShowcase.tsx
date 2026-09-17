@@ -506,6 +506,7 @@ const PortfolioShowcase = ({
             I turn characters, creatures and props into images with a story you can feel.
           </p>
           <div className="hero-actions" aria-label="Downloads">
+            <a href="/cv">View CV</a>
             <a href="/downloads/Fira-CG-CV.pdf" download>
               <Download /> Download CV
             </a>
@@ -661,20 +662,19 @@ const PortfolioShowcase = ({
             <ul>
               <li>
                 <strong>GAMETEQ · January 2024—July 2026</strong>
-                <span>2D Artist · Full-time · Tbilisi, Georgia · Hybrid</span>
+                <span>2D Artist · Plarium's Throne: Kingdom at War and Vikings: War of Clans · Tbilisi, Georgia</span>
               </li>
               <li>
                 <strong>DEFU Games · 2020—2023</strong>
                 <span>
-                  2D Artist, then Lead Artist across Love Camp, Pulse of Love, Candy Puzzle, Puzzle
-                  Kingdom, Money Rush and Egg Wars.
+                  2D Artist, then Lead Artist. Developed visual style and led 2D production across
+                  Love Camp, Pulse of Love, Candy Puzzle, Puzzle Kingdom, Money Rush and Egg Wars.
                 </span>
               </li>
               <li>
                 <strong>Nordcurrent · 2018—2019</strong>
                 <span>
-                  Concept art, character close-ups and illustration for Murder by Choice: Mystery
-                  Game.
+                  Illustrations, locations, props and concepts for Murder by Choice: Mystery Game.
                 </span>
               </li>
               <li>

@@ -6,7 +6,7 @@ import { Menu, X } from "lucide-react";
 const navItems = [
   { name: "Line art", href: "#lineart" },
   { name: "Plarium", href: "#plarium" },
-  { name: "CV", href: "/downloads/Fira-CG-CV.pdf", download: true },
+  { name: "CV", href: "/cv", page: true },
   { name: "Sketchbook", href: "#sketchbook" },
 ];
 
@@ -58,8 +58,8 @@ const Navigation = ({ onContactClick }: { onContactClick: () => void }) => {
           {/* Desktop Navigation */}
           <div className="hidden md:flex items-center space-x-8 nav-links">
             {navItems.map((item) =>
-              item.download ? (
-                <a key={item.name} href={item.href} download>
+              item.page ? (
+                <a key={item.name} href={item.href}>
                   {item.name}
                 </a>
               ) : (
@@ -95,11 +95,10 @@ const Navigation = ({ onContactClick }: { onContactClick: () => void }) => {
           >
             <div className="px-4 pt-2 pb-4 space-y-2">
               {navItems.map((item) =>
-                item.download ? (
+                item.page ? (
                   <a
                     key={item.name}
                     href={item.href}
-                    download
                     onClick={() => setIsOpen(false)}
                     className="block w-full text-left px-4 py-2 text-foreground hover:text-primary hover:bg-primary/10 rounded-md transition-all duration-300"
                   >

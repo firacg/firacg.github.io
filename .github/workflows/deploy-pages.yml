@@ -37,7 +37,7 @@ jobs:
           NITRO_APP_BASE_URL: /
           VITE_CONTACT_API_URL: ${{ vars.CONTACT_API_URL }}
 
-      - name: Render the home page
+      - name: Render the home page and CV
         shell: bash
         run: |
           PORT=4173 node .output/server/index.mjs &
@@ -50,6 +50,14 @@ jobs:
             sleep 1
           done
           test -s .output/public/index.html
+          mkdir -p .output/public/cv
+          for attempt in {1..30}; do
+            if curl --fail --silent http://127.0.0.1:4173/cv > .output/public/cv/index.html; then
+              break
+            fi
+            sleep 1
+          done
+          test -s .output/public/cv/index.html
           touch .output/public/.nojekyll
 
       - name: Upload Pages artifact

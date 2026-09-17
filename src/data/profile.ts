@@ -14,6 +14,7 @@ export const social = {
   artstation: "https://www.artstation.com/maboroshi94",
   behance: "https://www.behance.net/maboroshi94",
   linkedin: "https://www.linkedin.com/in/firacg/",
+  telegram: "https://t.me/FiraCG",
   tumblr: "https://www.tumblr.com/blog/firacgart",
 };
 
@@ -42,6 +43,7 @@ export interface ExperienceItem {
   company: string;
   location: string;
   description?: string;
+  description2?: string;
 }
 
 export const experience: ExperienceItem[] = [
@@ -51,7 +53,7 @@ export const experience: ExperienceItem[] = [
     title: "2D Artist",
     company: "GAMETEQ",
     location: "Tbilisi, Georgia · Hybrid",
-    description: "Full-time 2D Artist.",
+    description: "Created 2D game art for Plarium's Throne: Kingdom at War and Vikings: War of Clans.",
   },
   {
     year: "2021 — 2023",
@@ -59,11 +61,11 @@ export const experience: ExperienceItem[] = [
     title: "Lead 2D Artist",
     company: "DEFU Games",
     location: "Одесса",
-    description:
-      "Led and contributed to 2D production across Love Camp, Pulse of Love, Candy Puzzle, Puzzle Kingdom, Money Rush and Egg Wars.",
+    description: "Developed visual style and led 2D art production across six game projects.",
+    description2: "Love Camp, Pulse of Love, Candy Puzzle, Puzzle Kingdom, Money Rush and Egg Wars.",
   },
   {
-    year: "2020 — 2023",
+    year: "2020 — 2021",
     type: "work",
     title: "2D Artist",
     company: "DEFU Games",
@@ -83,7 +85,7 @@ export const experience: ExperienceItem[] = [
     company: "Nordcurrent",
     location: "Одесская область",
     description:
-      "Concept art, character close-ups and illustrations for Murder by Choice: Mystery Game.",
+      "Illustrations, locations, props and concepts for Murder by Choice: Mystery Game.",
   },
   {
     year: "2015 — 2016",
