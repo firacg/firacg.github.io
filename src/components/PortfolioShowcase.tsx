@@ -1187,6 +1187,16 @@ const PortfolioShowcase = ({
           </nav>
           <span>© {new Date().getFullYear()} Fira CG · All artwork rights reserved</span>
         </div>
+        <div className="footer-bottom" style={{ marginTop: "1.25rem", borderTop: "none" }}>
+          <nav aria-label="Case study presentations">
+            <a href="/spotify-pause/en/" target="_blank" rel="noreferrer">
+              Spotify case study · EN
+            </a>
+            <a href="/spotify-pause/" target="_blank" rel="noreferrer">
+              Презентация Spotify · RU
+            </a>
+          </nav>
+        </div>
       </footer>
 
       {selectedArtwork && (
