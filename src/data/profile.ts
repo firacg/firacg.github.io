@@ -6,7 +6,7 @@ export const profile = {
   location: "Currently in Tbilisi, Georgia",
   languages: ["English", "Ukrainian", "Russian", "Japanese (elementary)"],
   skills: ["Game Art", "Character Design", "Concept Development"],
-  bio: "Painting is where I started, years at art college before games ever entered the picture. Since 2018 I've worked inside game studios — Nordcurrent, DEFU Games and GAMETEQ — taking characters from a rough thumbnail to a finished piece ready for production, on titles including Plarium's Throne: Kingdom at War and Vikings: War of Clans. Since July 2026 I have worked independently as a freelance 2D artist and visual generalist.",
+  bio: "Painting is where I started, years at art college before games ever entered the picture. Since 2018 I've worked inside game studios — Nordcurrent, DEFU Games and GAMETEQ — taking characters from a rough thumbnail to a finished piece ready for production. Since July 2026 I have worked independently as a freelance 2D artist and visual generalist.",
 };
 
 export const social = {
@@ -53,7 +53,7 @@ export const experience: ExperienceItem[] = [
     title: "2D Artist",
     company: "GAMETEQ",
     location: "Tbilisi, Georgia · Hybrid",
-    description: "Created 2D game art for Plarium's Throne: Kingdom at War and Vikings: War of Clans.",
+    description: "Created 250+ game and marketing illustrations, from concept and composition to finished realism and semi-realism artwork.",
   },
   {
     year: "2021 — 2023",

@@ -75,10 +75,9 @@ function CVPage() {
             </h1>
             <p className="cv-role">2D game artist & illustrator</p>
             <p className="cv-summary">
-              I draw characters, locations and props for games. Most recently, I worked at GAMETEQ
-              on art for Plarium’s <cite>Throne: Kingdom at War</cite> and{" "}
-              <cite>Vikings: War of Clans</cite>. Before that, I led 2D art at DEFU Games and made
-              illustrations for Nordcurrent.
+              I draw characters, locations and props for games. I have 8+ years in game production,
+              created 250+ game and marketing illustrations at GAMETEQ, and led a team of seven
+              artists at DEFU Games. Earlier, I made illustrations for Nordcurrent.
             </p>
             <div className="cv-intro-bottom">
               <p>

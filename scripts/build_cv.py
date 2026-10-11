@@ -165,7 +165,7 @@ line("I began in traditional painting and moved into games in 2018. I have worke
 
 section("Professional experience")
 role("Freelance 2D Artist & Illustrator", "Independent", "Jul 2026 - present", "Character, illustration and game-art commissions; concepts through final artwork.")
-role("2D Artist", "GAMETEQ, Tbilisi", "Jan 2024 - Jul 2026", "Created 2D game art for Plarium's Throne: Kingdom at War and Vikings: War of Clans.")
+role("2D Artist", "GAMETEQ, Tbilisi", "Jan 2024 - Jul 2026", "Created game and marketing illustrations, from concept and composition to final artwork.")
 role("Lead 2D Artist", "DEFU Games, Odesa", "2021 - 2023", [
     "Developed visual style and led 2D art production across six game projects.",
     "Love Camp, Pulse of Love, Candy Puzzle, Puzzle Kingdom, Money Rush and Egg Wars.",
