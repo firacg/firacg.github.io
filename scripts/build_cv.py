@@ -1,202 +1,94 @@
-"""Build a simple, selectable-text CV for applicant tracking systems."""
-
 from pathlib import Path
+from xml.sax.saxutils import escape
+from reportlab.platypus import SimpleDocTemplate, Paragraph, Spacer, PageBreak, KeepTogether
+from reportlab.lib.styles import ParagraphStyle
+from reportlab.lib.colors import HexColor
+from reportlab.lib.enums import TA_LEFT
+from reportlab.lib.pagesizes import A4
+from pypdf import PdfReader
+import json
 
-from reportlab.lib import colors
-from reportlab.lib.utils import simpleSplit
-from reportlab.lib.utils import ImageReader
-from reportlab.pdfbase import pdfmetrics
-from reportlab.pdfbase.ttfonts import TTFont
-from reportlab.pdfgen import canvas
-
-
-ROOT = Path(__file__).resolve().parents[1]
-OUTPUT = ROOT / "public" / "downloads" / "Fira-CG-CV.pdf"
-FONT_DIR = Path("C:/Windows/Fonts")
-pdfmetrics.registerFont(TTFont("BodyCV", str(FONT_DIR / "segoeui.ttf")))
-pdfmetrics.registerFont(TTFont("BodyCV-Bold", str(FONT_DIR / "segoeuib.ttf")))
-pdfmetrics.registerFont(TTFont("DisplayCV", str(FONT_DIR / "ariblk.ttf")))
-
-PAGE_W, PAGE_H = 595.28, 841.89
-LEFT, RIGHT = 49, 49
-INK = colors.HexColor("#121212")
-MUTED = colors.HexColor("#55565C")
-ACCENT = colors.HexColor("#E00043")
-PAPER = colors.HexColor("#F5F4F2")
-SOFT = colors.HexColor("#F1F0EF")
-SOFT_PINK = colors.HexColor("#FAF7F8")
-
-c = canvas.Canvas(str(OUTPUT), pagesize=(PAGE_W, PAGE_H), pageCompression=1)
-c.setTitle("Dariya Dovhenko - 2D Game Artist & Illustrator - CV")
-c.setAuthor("Dariya Dovhenko")
-c.setFillColor(PAPER)
-c.rect(0, 0, PAGE_W, PAGE_H, fill=1, stroke=0)
-y = PAGE_H - 49
-
-
-def line(text, size=9.4, bold=False, color=INK, leading=13):
-    global y
-    font = "BodyCV-Bold" if bold else "BodyCV"
-    c.setFont(font, size)
-    c.setFillColor(color)
-    for segment in simpleSplit(text, font, size, PAGE_W - LEFT - RIGHT):
-        c.drawString(LEFT, y, segment)
-        y -= leading
-
-
-def section(title):
-    global y
-    y -= 21
-    c.setLineWidth(.75)
-    c.setStrokeColor(ACCENT)
-    c.line(LEFT, y + 17, LEFT + 37, y + 17)
-    c.setStrokeColor(colors.HexColor("#C8C8C8"))
-    c.line(LEFT + 43, y + 17, PAGE_W - RIGHT, y + 17)
-    line(title.upper(), 9.4, True, INK, 19)
-
-
-def role(title, organisation, dates, detail):
-    global y
-    c.setFillColor(SOFT_PINK)
-    c.roundRect(LEFT - 6, y - 5, PAGE_W - LEFT - RIGHT + 12, 18, 3, fill=1, stroke=0)
-    c.setFillColor(INK)
-    c.setFont("BodyCV-Bold", 9.5)
-    c.drawString(LEFT, y, f"{title} - {organisation}")
-    c.setFillColor(ACCENT)
-    c.setFont("BodyCV", 8.7)
-    c.drawRightString(PAGE_W - RIGHT, y, dates)
-    y -= 14
-    if isinstance(detail, str):
-        detail = [detail]
-    for detail_line in detail:
-        line(detail_line, 9.0, False, MUTED, 13)
-    y -= 6
-
-
-def skill_row(label, details, index):
-    global y
-    row_y = y
-    if index % 2 == 1:
-        c.setFillColor(SOFT)
-        c.rect(LEFT - 4, row_y - 5, PAGE_W - LEFT - RIGHT + 8, 15, fill=1, stroke=0)
-    # A tiny diamond is a restrained nod to game-interface visual language.
-    c.setFillColor(ACCENT)
-    p = c.beginPath()
-    p.moveTo(LEFT + 4, row_y + 2.5)
-    p.lineTo(LEFT + 7, row_y - .5)
-    p.lineTo(LEFT + 4, row_y - 3.5)
-    p.lineTo(LEFT + 1, row_y - .5)
-    p.close()
-    c.drawPath(p, fill=1, stroke=0)
-    c.setFillColor(INK)
-    c.setFont("BodyCV-Bold", 8.5)
-    c.drawString(LEFT + 17, row_y, label)
-    c.setFont("BodyCV", 8.45)
-    if pdfmetrics.stringWidth(details, "BodyCV", 8.45) > PAGE_W - RIGHT - (LEFT + 129):
-        raise RuntimeError(f"Skill row is too long: {label}")
-    c.drawString(LEFT + 129, row_y, details)
-    y -= 15
-
-
-c.setFillColor(INK)
-c.rect(34, 677, PAGE_W - 68, 137, fill=1, stroke=0)
-c.setFillColor(ACCENT)
-c.rect(34, 677, 6, 137, fill=1, stroke=0)
-c.setFont("BodyCV-Bold", 8.5)
-c.drawString(LEFT, 790, "FIRA CG  /  GAME ART CV")
-c.setFillColor(PAPER)
-c.setFont("DisplayCV", 26)
-c.drawString(LEFT - 1, 751, "DARIYA DOVHENKO")
-c.setFont("BodyCV-Bold", 10.2)
-c.drawString(LEFT, 720, "2D GAME ARTIST  /  ILLUSTRATOR")
-c.setFillColor(colors.HexColor("#C9C5CA"))
-c.setFont("BodyCV", 9.1)
-c.drawString(LEFT, 696, "Tbilisi, Georgia  |  Remote / hybrid  |  firacgi@gmail.com")
-
-links = [
-    ("Website", "https://firacg.github.io/", "globe.png"),
-    ("ArtStation", "https://www.artstation.com/maboroshi94", "artstation.png"),
-    ("LinkedIn", "https://www.linkedin.com/in/firacg/", "linkedin (1).png"),
-    ("Instagram", "https://www.instagram.com/fira_cg/", "instagram.png"),
-    ("Telegram", "https://t.me/FiraCG", "telegram.png"),
+OUT=Path(__file__).resolve().parents[1] / 'public' / 'downloads'
+OUT.mkdir(parents=True,exist_ok=True)
+styles={
+ 'name':ParagraphStyle('name',fontName='Helvetica-Bold',fontSize=21,leading=25,spaceAfter=6,textColor=HexColor('#20324b')),
+ 'role':ParagraphStyle('role',fontName='Helvetica-Bold',fontSize=12,leading=16,spaceAfter=9),
+ 'body':ParagraphStyle('body',fontName='Helvetica',fontSize=10,leading=14,spaceAfter=6),
+ 'section':ParagraphStyle('section',fontName='Helvetica-Bold',fontSize=10,leading=15,spaceBefore=12,spaceAfter=6,textColor=HexColor('#20324b')),
+ 'job':ParagraphStyle('job',fontName='Helvetica-Bold',fontSize=10,leading=14,spaceBefore=6,spaceAfter=4),
+ 'bullet':ParagraphStyle('bullet',fontName='Helvetica',fontSize=10,leading=14,leftIndent=10,firstLineIndent=-8,spaceAfter=5),
+}
+education=[
+ 'Fine Art (specialised secondary qualification) - Grekov Odesa Art College | 2018',
+ 'Master\'s degree, Management of Organisations - International Humanitarian University, Odesa | 2018',
+ 'Bachelor\'s level, Engineer-Programmer - Odesa National Polytechnic University | 2015',
+ 'Computer Technology (specialised secondary qualification) - Odesa Polytechnic | 2015',
+ 'Graphic Design course - IT Step Academy | 2016',
 ]
-icon_sizes = {
-    "Website": 13.5,
-    "ArtStation": 13,
-    "LinkedIn": 13,
-    "Instagram": 12,
-    "Telegram": 13,
-}
-icon_offsets = {
-    "Website": (-1, 1),
-    "ArtStation": (0, 1),
-    "LinkedIn": (0, 1.5),
-    "Instagram": (0, 0),
-    "Telegram": (-2, 0),
-}
-for index, (label, url, icon_name) in enumerate(links):
-    x = LEFT + index * 100
-    button_width = 96.5
-    c.setFillColor(colors.white)
-    c.setStrokeColor(colors.HexColor("#D8D5D4"))
-    c.setLineWidth(.6)
-    c.roundRect(x, 640, button_width, 27, 4, fill=1, stroke=1)
-    label_width = pdfmetrics.stringWidth(label, "BodyCV-Bold", 8.2)
-    label_left = x + (button_width - label_width) / 2
-    icon_center_x = (x + label_left) / 2
-    icon_size = icon_sizes[label]
-    icon_dx, icon_dy = icon_offsets[label]
-    c.drawImage(
-        ImageReader(ROOT / "icons" / icon_name),
-        icon_center_x - icon_size / 2 + icon_dx,
-        653.5 - icon_size / 2 + icon_dy,
-        icon_size,
-        icon_size,
-        mask="auto",
-    )
-    c.setFillColor(INK)
-    c.setFont("BodyCV-Bold", 8.2)
-    c.drawCentredString(x + button_width / 2, 651, label)
-    c.linkURL(url, (x, 640, x + button_width, 667), relative=0)
-y = 629
+variants = {'Senior_2D_Game_Artist': {
+  'role':'Senior 2D Game Artist / Illustrator',
+  'summary':'2D Game Artist and Illustrator with 8+ years in game production and previous experience as Lead 2D Artist. Delivered 250+ game and marketing illustrations at GAMETEQ and led a team of seven artists at DEFU Games. Creates characters, environments, props, UI graphics and finished illustrations, with a focus on realism and semi-realism and experience across casual/mobile projects.',
+  'skills':[
+   '2D production: sketches, thumbnails, design variations, character and environment art, turnarounds, prop sheets, isometry, icons and UI graphics.',
+   'Production handoff: layered PSDs prepared for Spine animation, separated parts, animation overlaps and hidden-area painting.',
+   'Art direction and leadership: style guides, brand identity, planning, hiring, mentoring, art reviews, paintovers and cross-team collaboration.',
+   'Tools: Adobe Photoshop, Clip Studio Paint, Adobe Illustrator, Blender, Figma, Trello, Jira and Miro. Practical 3D modelling, blockouts, textures and shaders.',
+   'Additional AI production: commercial use since late 2022; Stable Diffusion, FLUX, ComfyUI workflows and custom nodes, LoRA training, ControlNet, IP-Adapter and Photoshop finishing.',
+  ],
+  'projects':[
+   ('Released game work','DEFU Games: Love Camp, Pulse of Love (Steam), Candy Puzzle, Puzzle Kingdom, Money Rush, Egg Wars and other released projects. Career credits include 10+ released hypercasual games and two semi-realistic projects.'),
+   ('Art portfolio','https://firacg.github.io/'),
+   ('Game projects on Behance','https://www.behance.net/maboroshi94'),
+  ],
+ }}
 
-section("Profile")
-line("I began in traditional painting and moved into games in 2018. I have worked on characters, props and story-driven illustrations for studio teams, and have also led 2D art production. I enjoy shaping the first rough idea, then staying with it through the final details that make it work in a game.", 9.2, leading=13)
+def para(text,style='body'):
+ return Paragraph(escape(text),styles[style])
+def link(url,label=None):
+ return Paragraph('<link href="'+escape(url,{'"':'&quot;'})+'" color="#214b77">'+escape(label or url)+'</link>',styles['body'])
+def add_section(story,title):story.append(para(title,'section'))
+def add_job(story,title,date,items):
+ story.append(KeepTogether([para(title,'job'),para(date)]+[para('- '+i,'bullet') for i in items]))
+def footer(c,d):
+ c.setFont('Helvetica',8);c.setFillColor(HexColor('#667085'));c.drawRightString(A4[0]-42,25,f'{d.page}')
 
-section("Professional experience")
-role("Freelance 2D Artist & Illustrator", "Independent", "Jul 2026 - present", "Character, illustration and game-art commissions; concepts through final artwork.")
-role("2D Artist", "GAMETEQ, Tbilisi", "Jan 2024 - Jul 2026", "Created game and marketing illustrations, from concept and composition to final artwork.")
-role("Lead 2D Artist", "DEFU Games, Odesa", "2021 - 2023", [
-    "Developed visual style and led 2D art production across six game projects.",
-    "Love Camp, Pulse of Love, Candy Puzzle, Puzzle Kingdom, Money Rush and Egg Wars.",
-])
-role("2D Artist", "DEFU Games, Odesa", "2020 - 2021", "2D art production for game projects; subsequently moved into the lead role.")
-role("Freelance 2D Artist", "Various clients, Ukraine", "2019 - 2020", "Illustrations, portraits and icons for indie teams and international clients.")
-role("2D Artist", "Nordcurrent, Odesa region", "2018 - 2019", "Illustrations, locations, props and concepts for Murder by Choice: Mystery Game.")
-
-section("Education")
-line("Fine Art - Grekov Odesa Art College, 2016 - 2018", 9.1, leading=13)
-line("Graphic Design - IT Step Academy, 2015 - 2016", 9.1, leading=13)
-line("Specialist, Computer Technology - Odesa Polytechnic, 2010 - 2015", 9.1, leading=13)
-
-section("Languages")
-line("English | Ukrainian | Russian", 9.1, leading=13)
-
-section("Core skills")
-skill_row("Game art", "Characters, key art, props, concepts, visual storytelling", 0)
-skill_row("Art fundamentals", "Composition, anatomy, perspective, color and light, value, form", 1)
-skill_row("Creative software", "Photoshop, Clip Studio Paint, Blender 3D, Illustrator, Figma", 2)
-skill_row("AI-assisted art", "Stable Diffusion, ComfyUI, LoRA, checkpoints, Midjourney, Gemini, Higgsfield", 3)
-skill_row("Collaboration", "Jira, Miro, Trello", 4)
-
-if y < 50:
-    raise RuntimeError(f"CV overflows page: y={y}")
-c.setStrokeColor(colors.HexColor("#C8C8C8"))
-c.setLineWidth(.6)
-c.line(LEFT, 50, PAGE_W - RIGHT, 50)
-c.setFillColor(MUTED)
-c.setFont("BodyCV", 8)
-c.drawString(LEFT, 36, "Fira CG  /  Game art portfolio and CV")
-c.drawRightString(PAGE_W - RIGHT, 36, "01")
-c.save()
-print(f"Created {OUTPUT} (last baseline {y:.1f} pt)")
+results=[]
+for key,v in variants.items():
+ story=[para('Daria Dovhenko','name'),para(v['role'],'role'),para('Tbilisi, Georgia | Fully remote; hybrid or on-site in Georgia'),para('Email: firacgi@gmail.com')]
+ for url in (['https://firacg.github.io/ai-video/'] if key!='Senior_2D_Game_Artist' else [])+['https://firacg.github.io/','https://www.artstation.com/maboroshi94','https://www.behance.net/maboroshi94','https://www.linkedin.com/in/firacg/']:story.append(link(url))
+ add_section(story,'PROFESSIONAL SUMMARY');story.append(para(v['summary']))
+ add_section(story,'CORE SKILLS')
+ for text in v['skills']:story.append(para(text))
+ add_section(story,'PROFESSIONAL EXPERIENCE')
+ add_job(story,'Freelance 2D Artist and Illustrator | Independent','Jul 2026 - Present',['Create character, illustration and game-art commissions, from concepts to finished artwork.'])
+ add_job(story,'2D Artist | GAMETEQ | Tbilisi, Georgia','Jan 2024 - Jul 2026',[
+  'Delivered 250+ game and marketing illustrations at GAMETEQ, from concept and composition to final artwork.',
+  'Created realistic and semi-realistic in-game shop, marketing, social media, promotional and advertising artwork; adapted deliverables for formats and UI layouts.',
+  'Combined art fundamentals and AI-assisted exploration with manual finishing; revised composition, anatomy, perspective and lighting to match project direction.',
+ ])
+ story.append(PageBreak())
+ add_section(story,'PROFESSIONAL EXPERIENCE CONTINUED')
+ add_job(story,'Lead 2D Artist | DEFU Games | Odesa, Ukraine','2021 - 2023',[
+  'Led seven artists; hired and mentored team members, assigned tasks, planned deadlines and coordinated production in Trello and Jira.',
+  'Developed project visual styles, style guides and brand identity, from UI graphics to finished illustrations; collaborated with programmers, game designers and art directors.',
+  'Reviewed work, provided paintovers and final polish, created artist lessons and prepared layered PSD assets for Spine animation.',
+ ])
+ add_job(story,'2D Artist | DEFU Games | Odesa, Ukraine','2020 - 2021',['Created game artwork; subsequently promoted to Lead 2D Artist.'])
+ add_job(story,'Freelance 2D Artist | Various Clients | Ukraine','2019 - 2020',['Created illustrations, portraits and icons for indie teams and international clients.'])
+ add_job(story,'2D Artist | Nordcurrent | Odesa Region, Ukraine','2018 - 2019',['Created illustrations, environments, props and concepts for Murder by Choice: Mystery Game.'])
+ add_section(story,'SELECTED PROJECTS')
+ if key!='Senior_2D_Game_Artist':story.append(para('All public AI-video work is personal portfolio work. Client work is not currently available for public viewing.'))
+ for title,text in v['projects']:
+  if text.startswith('https://'):story.append(link(text,title))
+  else:story.append(para(title+': '+text))
+ add_section(story,'EDUCATION AND TRAINING')
+ for e in education:story.append(para(e))
+ add_section(story,'LANGUAGES');story.append(para('English: C1 | Ukrainian: C2 | Russian: native'))
+ file=OUT/'Fira-CG-CV.pdf'
+ SimpleDocTemplate(str(file),pagesize=A4,rightMargin=42,leftMargin=42,topMargin=36,bottomMargin=40,title=f'Daria Dovhenko - {v["role"]}',author='Daria Dovhenko').build(story,onFirstPage=footer,onLaterPages=footer)
+ reader=PdfReader(file);text='\n'.join(p.extract_text() for p in reader.pages)
+ assert all(len(p.extract_text())>100 for p in reader.pages)
+ assert '250+' in text and 'DreamBooth' not in text and 'Custom Diffusion' not in text
+ assert ('plar' + 'ium') not in text.casefold()
+ results.append({'file':str(file),'pages':len(reader.pages),'bytes':file.stat().st_size,'role':v['role']})
+print(json.dumps(results,ensure_ascii=True))

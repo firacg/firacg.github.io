@@ -1,8 +1,9 @@
 export const profile = {
   name: "Fira CG",
-  fullName: "Dariya Dovhenko",
+  fullName: "Daria Dovhenko",
   title: "Freelance 2D Artist & Visual Generalist",
-  pitch: "I draw for game dev companies — characters, locations, props and items.",
+  pitch:
+    "I draw for game dev companies — characters, locations, props and items.",
   location: "Currently in Tbilisi, Georgia",
   languages: ["English", "Ukrainian", "Russian", "Japanese (elementary)"],
   skills: ["Game Art", "Character Design", "Concept Development"],
@@ -32,7 +33,11 @@ export const commissionInfo = {
     "Сдача проекта",
   ],
   prepayment: "Предоплата 50% после согласования эскиза",
-  restrictions: ["UI/UX и интерфейсы", "Hyper-casual стиль", "Сложные 3D-модели и скульпты"],
+  restrictions: [
+    "UI/UX и интерфейсы",
+    "Hyper-casual стиль",
+    "Сложные 3D-модели и скульпты",
+  ],
   responseHours: "Обычно на связи 9:00–23:00 по времени Тбилиси",
 };
 
@@ -53,7 +58,10 @@ export const experience: ExperienceItem[] = [
     title: "2D Artist",
     company: "GAMETEQ",
     location: "Tbilisi, Georgia · Hybrid",
-    description: "Created 250+ game and marketing illustrations, from concept and composition to finished realism and semi-realism artwork.",
+    description:
+      "Created 250+ game and marketing illustrations, from concept and composition to finished realism and semi-realism artwork.",
+    description2:
+      "In-game shop, advertising, social media and promotional artwork; adapted assets for formats and UI layouts. Combined drawing and AI-assisted exploration with manual Photoshop finishing.",
   },
   {
     year: "2021 — 2023",
@@ -61,8 +69,10 @@ export const experience: ExperienceItem[] = [
     title: "Lead 2D Artist",
     company: "DEFU Games",
     location: "Одесса",
-    description: "Developed visual style and led 2D art production across six game projects.",
-    description2: "Love Camp, Pulse of Love, Candy Puzzle, Puzzle Kingdom, Money Rush and Egg Wars.",
+    description:
+      "Led seven artists across six projects: hiring, mentoring, task planning and production coordination in Trello and Jira. Developed visual styles, style guides and brand identity; reviewed artwork, provided paintovers and final polish, and prepared layered PSDs for Spine animation.",
+    description2:
+      "Love Camp, Pulse of Love (Steam), Candy Puzzle, Puzzle Kingdom, Money Rush and Egg Wars. Collaborated with programmers, game designers and art directors.",
   },
   {
     year: "2020 — 2021",
@@ -70,6 +80,8 @@ export const experience: ExperienceItem[] = [
     title: "2D Artist",
     company: "DEFU Games",
     location: "Одесса",
+    description:
+      "Created game artwork; subsequently promoted to Lead 2D Artist.",
   },
   {
     year: "2019 — 2020",
@@ -77,6 +89,8 @@ export const experience: ExperienceItem[] = [
     title: "2D Artist, Freelance",
     company: "Разные клиенты",
     location: "Украина",
+    description:
+      "Created illustrations, portraits and icons for indie teams and international clients.",
   },
   {
     year: "2018 — 2019",

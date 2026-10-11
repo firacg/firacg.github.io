@@ -2,18 +2,44 @@ import { createFileRoute } from "@tanstack/react-router";
 import { experience, profile, social } from "@/data/profile";
 
 const work = experience.filter(
-  (item) => item.type === "work" && !["7-40", "Upperline Studio"].includes(item.company),
+  (item) =>
+    item.type === "work" &&
+    !["7-40", "Upperline Studio"].includes(item.company),
 );
-const education = experience.filter((item) => item.type === "education");
+const education = [
+  {
+    title: "Fine Art — specialised secondary qualification",
+    company: "Grekov Odesa Art College",
+    year: "2018",
+  },
+  {
+    title: "Master's degree, Management of Organisations",
+    company: "International Humanitarian University, Odesa",
+    year: "2018",
+  },
+  {
+    title: "Bachelor's level, Engineer-Programmer",
+    company: "Odesa National Polytechnic University",
+    year: "2015",
+  },
+  {
+    title: "Computer Technology — specialised secondary qualification",
+    company: "Odesa Polytechnic",
+    year: "2015",
+  },
+  { title: "Graphic Design course", company: "IT Step Academy", year: "2016" },
+];
 const english: Record<string, string> = {
   Художник: "2D Artist",
   "Разные клиенты": "Various clients",
   Одесса: "Odesa",
   Украина: "Ukraine",
   "Одесская область": "Odesa region",
-  "Одесское художественное училище им. М. Б. Грекова": "Grekov Odesa Art College",
+  "Одесское художественное училище им. М. Б. Грекова":
+    "Grekov Odesa Art College",
   "Магистр, Менеджмент организаций": "MA, Management of Organisations",
-  "Одесский международный гуманитарный университет": "International Humanitarian University, Odesa",
+  "Одесский международный гуманитарный университет":
+    "International Humanitarian University, Odesa",
   ОНПУ: "Odesa Polytechnic",
 };
 const en = (value: string) => english[value] ?? value;
@@ -21,24 +47,38 @@ const en = (value: string) => english[value] ?? value;
 const tools = [
   {
     label: "Drawing & painting",
-    value: "Character art, illustration, props, environments, composition, colour and light",
+    value:
+      "Characters, environments, props, narrative illustrations, icons, UI art and isometry. Sketches, thumbnails, design variations, turnarounds and prop sheets; realism, semi-realism and casual/mobile projects.",
   },
-  { label: "Software", value: "Photoshop, Clip Studio Paint, Blender, Illustrator, Figma" },
+  {
+    label: "Software",
+    value: "Photoshop, Clip Studio Paint, Blender, Illustrator, Figma",
+  },
   {
     label: "AI workflows",
-    value: "Stable Diffusion, ComfyUI, LoRA, Midjourney, Gemini, Higgsfield",
+    value:
+      "Commercial AI image production since late 2022. Stable Diffusion, FLUX, ComfyUI original/adapted workflows and custom nodes, Forge, AUTOMATIC1111, LoRA training, ControlNet, IP-Adapter, img2img and inpainting. Manual drawing and Photoshop finishing.",
   },
-  { label: "Production", value: "Jira, Miro, Trello" },
+  {
+    label: "Production handoff",
+    value:
+      "Layered PSDs prepared for Spine animation: separated parts and hidden-area painting. Practical 3D modelling, Blender blockouts, textures and shaders.",
+  },
+  {
+    label: "Leadership",
+    value:
+      "Hiring, mentoring, planning, art reviews, paintovers, final polish, visual styles, style guides and cross-team collaboration. Trello, Jira and Miro.",
+  },
 ];
 
 export const Route = createFileRoute("/cv")({
   head: () => ({
     meta: [
-      { title: "CV | Dariya Dovhenko — 2D Game Artist & Illustrator" },
+      { title: "CV | Daria Dovhenko — Senior 2D Game Artist & Illustrator" },
       {
         name: "description",
         content:
-          "Dariya Dovhenko is a Tbilisi-based 2D game artist and illustrator. Experience at GAMETEQ, DEFU Games and Nordcurrent; character art, illustration, props and visual development.",
+          "Daria Dovhenko is a Tbilisi-based Senior 2D Game Artist and Illustrator with 8+ years in game production, 250+ illustrations at GAMETEQ and experience leading seven artists at DEFU Games.",
       },
     ],
   }),
@@ -69,21 +109,22 @@ function CVPage() {
               Fira CG <span aria-hidden="true">/</span> Curriculum vitae
             </p>
             <h1 id="cv-title">
-              Dariya
+              Daria
               <br />
               Dovhenko<span className="cv-title-period">.</span>
             </h1>
-            <p className="cv-role">2D game artist & illustrator</p>
+            <p className="cv-role">Senior 2D game artist & illustrator</p>
             <p className="cv-summary">
-              I draw characters, locations and props for games. I have 8+ years in game production,
-              created 250+ game and marketing illustrations at GAMETEQ, and led a team of seven
-              artists at DEFU Games. Earlier, I made illustrations for Nordcurrent.
+              I draw characters, locations and props for games. I have 8+ years
+              in game production, created 250+ game and marketing illustrations
+              at GAMETEQ, and led a team of seven artists at DEFU Games.
+              Earlier, I made illustrations for Nordcurrent.
             </p>
             <div className="cv-intro-bottom">
               <p>
                 Tbilisi, Georgia
                 <br />
-                <span>Available for remote or hybrid work</span>
+                <span>Fully remote · hybrid or on-site in Georgia</span>
               </p>
               <a className="cv-email" href="mailto:firacgi@gmail.com">
                 firacgi@gmail.com <span aria-hidden="true">↗</span>
@@ -93,7 +134,7 @@ function CVPage() {
           <figure className="cv-artwork">
             <img
               src="/portfolio/ksok2-web.webp"
-              alt="Personal illustration by Dariya Dovhenko: two characters resting together in a sunlit field"
+              alt="Personal illustration by Daria Dovhenko: two characters resting together in a sunlit field"
               fetchPriority="high"
             />
             <figcaption>
@@ -121,14 +162,22 @@ function CVPage() {
                   <h3>Freelance 2D Artist & Illustrator</h3>
                   <p className="cv-employer">Independent</p>
                   <p>
-                    Character and illustration commissions, from sketches through final artwork.
+                    Character and illustration commissions, from sketches
+                    through final artwork.
                   </p>
                 </div>
               </article>
               {work.map((item) => (
-                <article className="cv-entry" key={`${item.company}-${item.title}`}>
+                <article
+                  className="cv-entry"
+                  key={`${item.company}-${item.title}`}
+                >
                   <div className="cv-entry-date">
-                    <time>{item.year.replaceAll("January", "Jan").replaceAll("July", "Jul")}</time>
+                    <time>
+                      {item.year
+                        .replaceAll("January", "Jan")
+                        .replaceAll("July", "Jul")}
+                    </time>
                     <span>{en(item.location)}</span>
                   </div>
                   <div>
@@ -174,7 +223,7 @@ function CVPage() {
               </ul>
               <div className="cv-languages">
                 <h3>Languages</h3>
-                <p>English · Ukrainian · Russian</p>
+                <p>English: C1 · Ukrainian: C2 · Russian: native</p>
               </div>
             </div>
           </section>
