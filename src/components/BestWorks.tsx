@@ -27,7 +27,7 @@ const BestWorks = () => {
             Featured Work
           </h2>
           <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
-            A curated selection from Plarium's Throne: Kingdom at War and Vikings: War of Clans,
+            A curated selection of game and marketing illustrations created at GAMETEQ,
             plus personal work
           </p>
         </div>

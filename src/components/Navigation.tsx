@@ -5,7 +5,7 @@ import { Menu, X } from "lucide-react";
 
 const navItems = [
   { name: "Line art", href: "#lineart" },
-  { name: "Plarium", href: "#plarium" },
+  { name: "GAMETEQ", href: "#plarium" },
   { name: "CV", href: "/cv", page: true },
   { name: "Sketchbook", href: "#sketchbook" },
   { name: "AI Video Creatives", href: "/ai-video/", page: true },

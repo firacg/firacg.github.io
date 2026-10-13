@@ -79,7 +79,7 @@ const socialPosts = [
     src: "/portfolio/artstation/04.webp",
   },
   {
-    title: "KSOK",
+    title: "Ingame Illustrations — Throne: Kingdom at War",
     href: "https://www.artstation.com/artwork/DYk0Wo",
     src: "/portfolio/artstation/05.webp",
   },
@@ -589,7 +589,7 @@ const PortfolioShowcase = ({
         <Reveal className="section-intro horizontal">
           <div>
             <p className="eyebrow">Game art / selected posts</p>
-            <h2>Plarium & beyond</h2>
+            <h2>GAMETEQ & beyond</h2>
           </div>
           <p>
             Open the original posts to see current reactions, comments and full-resolution details.
@@ -667,7 +667,7 @@ const PortfolioShowcase = ({
             <ul>
               <li>
                 <strong>GAMETEQ · January 2024—July 2026</strong>
-                <span>2D Artist · Plarium's Throne: Kingdom at War and Vikings: War of Clans · Tbilisi, Georgia</span>
+                <span>2D Artist · Game and marketing illustrations · Tbilisi, Georgia</span>
               </li>
               <li>
                 <strong>DEFU Games · 2020—2023</strong>

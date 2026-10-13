@@ -35,7 +35,7 @@ const Gallery = () => {
             Full Portfolio
           </h2>
           <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
-            Game art for Plarium and personal work — filtered by project for now, skill tags coming
+            Game art created at GAMETEQ and personal work — filtered by project for now, skill tags coming
             as pieces are catalogued
           </p>
         </div>

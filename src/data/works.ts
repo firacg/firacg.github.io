@@ -29,7 +29,7 @@ export const categories: {
     value: "plarium",
     label: "Клиентские работы",
     project: "Throne: Kingdom at War / Vikings: War of Clans",
-    description: "Game art for Plarium's Throne: Kingdom at War and Vikings: War of Clans.",
+    description: "Game and marketing illustrations created at GAMETEQ.",
   },
   {
     value: "early",

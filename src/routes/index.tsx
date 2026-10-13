@@ -8,13 +8,13 @@ export const Route = createFileRoute("/")({
       {
         name: "description",
         content:
-          "Game art for Plarium's Throne: Kingdom at War and Vikings: War of Clans, plus personal work.",
+          "Game and marketing illustrations created at GAMETEQ, plus personal work.",
       },
       { property: "og:title", content: "Fira CG — Freelance 2D Artist & Visual Generalist" },
       {
         property: "og:description",
         content:
-          "Game art for Plarium's Throne: Kingdom at War and Vikings: War of Clans, plus personal work.",
+          "Game and marketing illustrations created at GAMETEQ, plus personal work.",
       },
       { property: "og:type", content: "website" },
       { property: "og:image", content: "https://firacg.github.io/portfolio/ksok2-web.webp" },
