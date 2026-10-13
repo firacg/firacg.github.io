@@ -447,11 +447,17 @@ main > footer {
   letter-spacing: 0.18em;
   text-transform: uppercase;
 }
-.scroll-cue {
+.hero-explore {
   position: absolute;
   z-index: 2;
   right: clamp(11rem, 18vw, 16rem);
   bottom: 2.5rem;
+  display: flex;
+  gap: 2rem;
+  align-items: center;
+}
+.scroll-cue,
+.hero-ai-link {
   display: flex;
   gap: 0.7rem;
   align-items: center;
@@ -461,8 +467,18 @@ main > footer {
   text-transform: uppercase;
   letter-spacing: 0.12em;
 }
-.scroll-cue svg {
+.scroll-cue svg,
+.hero-ai-link svg {
   width: 1rem;
+}
+.hero-ai-link:hover,
+.hero-ai-link:focus-visible {
+  color: #ff6b93;
+}
+@media (max-width: 1100px) {
+  .hero-explore {
+    bottom: 6rem;
+  }
 }
 @keyframes hero-drift {
   to {
@@ -2764,6 +2780,10 @@ main > footer {
   }
   .scroll-cue {
     display: none;
+  }
+  .hero-explore {
+    right: 1.25rem;
+    bottom: 5.7rem;
   }
   .feature-wide .feature-media {
     height: 115vw;

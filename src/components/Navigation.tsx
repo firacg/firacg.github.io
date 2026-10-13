@@ -8,6 +8,7 @@ const navItems = [
   { name: "Plarium", href: "#plarium" },
   { name: "CV", href: "/cv", page: true },
   { name: "Sketchbook", href: "#sketchbook" },
+  { name: "AI Video Creatives", href: "/ai-video/", page: true },
 ];
 
 const Navigation = ({ onContactClick }: { onContactClick: () => void }) => {
@@ -56,7 +57,7 @@ const Navigation = ({ onContactClick }: { onContactClick: () => void }) => {
           </a>
 
           {/* Desktop Navigation */}
-          <div className="hidden md:flex items-center space-x-8 nav-links">
+          <div className="hidden lg:flex items-center space-x-6 nav-links">
             {navItems.map((item) =>
               item.page ? (
                 <a key={item.name} href={item.href}>
@@ -69,7 +70,7 @@ const Navigation = ({ onContactClick }: { onContactClick: () => void }) => {
               ),
             )}
           </div>
-          <button className="nav-contact hidden md:inline-flex" onClick={onContactClick}>
+          <button className="nav-contact hidden lg:inline-flex" onClick={onContactClick}>
             Let’s talk
           </button>
 
@@ -78,7 +79,7 @@ const Navigation = ({ onContactClick }: { onContactClick: () => void }) => {
             variant="ghost"
             size="icon"
             onClick={() => setIsOpen(!isOpen)}
-            className="md:hidden"
+            className="lg:hidden"
             aria-label={isOpen ? "Close navigation menu" : "Open navigation menu"}
             aria-expanded={isOpen}
             aria-controls="mobile-navigation"
@@ -90,7 +91,7 @@ const Navigation = ({ onContactClick }: { onContactClick: () => void }) => {
         {/* Mobile Navigation */}
         {isOpen && (
           <div
-            className="md:hidden bg-card/95 backdrop-blur-md border border-border rounded-lg mt-2"
+            className="lg:hidden bg-card/95 backdrop-blur-md border border-border rounded-lg mt-2"
             id="mobile-navigation"
           >
             <div className="px-4 pt-2 pb-4 space-y-2">

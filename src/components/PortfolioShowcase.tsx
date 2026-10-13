@@ -520,9 +520,14 @@ const PortfolioShowcase = ({
             </a>
           ))}
         </nav>
-        <a className="scroll-cue" href="#lineart">
-          Selected work <ArrowDownRight />
-        </a>
+        <nav className="hero-explore" aria-label="Explore portfolios">
+          <a className="hero-ai-link" href="/ai-video/">
+            AI Video Creatives <ArrowUpRight />
+          </a>
+          <a className="scroll-cue" href="#lineart">
+            Selected work <ArrowDownRight />
+          </a>
+        </nav>
       </section>
 
       <section className="lineart-section section-pad" id="lineart">
