@@ -41,7 +41,7 @@ def footer(c, page, width, light=False):
     color = white if light else INK
     c.setFillColor(color)
     c.setFont("Helvetica", 7)
-    c.drawString(34, 22, "FIRA CG / DARIYA DOVHENKO")
+    c.drawString(34, 22, "FIRA CG / DARIA DOVHENKO")
     c.drawRightString(width - 34, 22, f"{page:02d}")
 
 
@@ -57,7 +57,7 @@ def cv_pdf():
     c.setFont("Helvetica-Bold", 52)
     c.drawString(38, h - 94, "FIRA CG")
     c.setFont("Helvetica", 15)
-    c.drawString(40, h - 122, "Dariya Dovhenko / Freelance 2D Artist & Visual Generalist")
+    c.drawString(40, h - 122, "Daria Dovhenko / Freelance 2D Artist & Visual Generalist")
     c.setFillColor(HexColor("#AAA5AA"))
     c.setFont("Helvetica", 10)
     c.drawString(40, h - 150, "Characters / Illustration / Props / Visual development")

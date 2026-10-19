@@ -617,7 +617,7 @@ const PortfolioShowcase = ({
 
       <section className="about section-pad" id="about">
         <Reveal className="about-lead">
-          <p className="eyebrow">About / Dariya Dovhenko</p>
+          <p className="eyebrow">About / Daria Dovhenko</p>
           <h2>
             Traditional training.
             <br />
