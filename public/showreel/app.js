@@ -1,0 +1,63 @@
+const projects = [
+  {id:'paul',title:'Apostle Paul',category:'Historical drama / cinematic study',description:'Character performance, physical action and a world with weight.',role:'Character development, AI visuals & editing',portrait:false},
+  {id:'healer',title:'The King’s Forbidden Healer',category:'Vertical drama',description:'A royal court, a forbidden gift and a character caught in the middle.',role:'Character development, AI visuals & editing',portrait:true,full:'/ai-video/assets/foxelli/healer.mp4'},
+  {id:'vampire',title:'Vampire',category:'Vertical drama',description:'Tension, intimacy and visual continuity across a dramatic sequence.',role:'Character development, AI visuals & editing',portrait:true,full:'/ai-video/assets/foxelli/vampire.mp4'},
+  {id:'diorita',title:'Diorita',category:'Original fantasy / anime & live action',description:'One original character, from an anime story to a message from another world.',role:'Original idea & script, character development, AI visuals & editing',portrait:true,full:'/ai-video/assets/diorita-film.mp4',fullLabel:'Watch live-action film'},
+  {id:'lip-gloss',title:'Cucumber Ice',category:'Beauty product concept / independent fan art',description:'Ice, texture, colour. A playful beauty film built around a lip balm-gloss.',role:'Concept, character development, AI visuals & editing',portrait:false,full:'/ai-video/assets/green-lip-gloss.mp4'},
+  {id:'blooming',title:'Blooming Hollow',category:'Original casual game advertising concept',description:'A neglected farmhouse becomes a place to grow.',role:'Concept, art direction, character development, AI visuals & editing',portrait:true,full:'/ai-video/assets/blooming-film.mp4'},
+  {id:'spotify',title:'Spotify — Pause',category:'Independent advertising concept',description:'A small interruption becomes a moment to pause.',role:'Character development, AI visuals & editing',portrait:false,full:'/ai-video/assets/spotify-final.mp4'},
+];
+const playIcon='<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 4 21 12 7 20Z"/></svg>';
+const pauseIcon='<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 4h4v16H6zM14 4h4v16h-4z"/></svg>';
+const fullIcon='<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 9V4h5m6 0h5v5M4 15v5h5m6 0h5v-5"/></svg>';
+const number=i=>String(i+1).padStart(2,'0');
+const fmt=n=>`${Math.floor((n||0)/60)}:${String(Math.floor((n||0)%60)).padStart(2,'0')}`;
+const main=document.querySelector('#films'),index=document.querySelector('#index-list');
+projects.forEach((p,i)=>{
+  const item=document.createElement('button');item.className='index-item';item.dataset.target=p.id;item.setAttribute('aria-label',`${number(i)}. ${p.title}`);item.setAttribute('aria-controls',p.id);
+  item.innerHTML=`<span class="index-number">${number(i)}</span><span><span class="thumb-wrap"><img src="assets/${p.id}.jpg" alt="" width="110" height="62"><span class="thumb-progress"></span></span><span class="thumb-name">${p.title}</span></span>`;index.append(item);
+  const section=document.createElement('section');section.className='project';section.id=p.id;section.dataset.number=`${number(i)} / ${number(projects.length-1)}`;section.setAttribute('aria-labelledby',`title-${p.id}`);
+  section.innerHTML=`<div class="film-column"><div class="stage ${p.portrait?'portrait':'landscape'}"><video src="assets/${p.id}.mp4" poster="assets/${p.id}.jpg" preload="${i===0?'auto':'none'}" muted playsinline loop aria-label="Selected excerpts from ${p.title}"></video><p class="video-error" hidden>Could not load this excerpt. <button class="retry">Try again</button>${p.full?`<br><a href="${p.full}" target="_blank" rel="noopener">Open the original film ↗</a>`:''}</p></div><div class="controls"><button class="play" aria-label="Play ${p.title}">${playIcon}</button><input class="seek" type="range" min="0" max="1000" value="0" aria-label="Seek in ${p.title}"><span class="time">0:00 / —</span><button class="fullscreen" aria-label="Fullscreen ${p.title}">${fullIcon}</button></div></div><div class="info"><p class="eyebrow">${p.category}</p><h1 id="title-${p.id}">${p.title}</h1><p class="description">${p.description}</p><dl class="role"><dt>My contribution</dt><dd>${p.role}</dd></dl>${p.full?`<a class="full-link" href="${p.full}" target="_blank" rel="noopener">${p.fullLabel||'Watch full film'} ↗</a>`:''}<p class="excerpt-note">Selected excerpts · Original proportions<br>AI-generated visuals, refined and edited by Fira.</p><button class="next" data-next="${(i+1)%projects.length}">${i===projects.length-1?'Back to the first film':'Next film'} <span aria-hidden="true">↓</span></button>${i===projects.length-1?'<button class="music-credit">Soundtrack & credits</button>':''}</div>`;
+  main.append(section);
+});
+const sections=[...document.querySelectorAll('.project')],videos=sections.map(s=>s.querySelector('video')),items=[...index.children];
+let active=-1,manualPause=false,scrollQueued=false;
+const reduced=matchMedia('(prefers-reduced-motion: reduce)').matches;
+function activate(i){
+ if(i===active)return;
+ videos.forEach((v,j)=>{if(j!==i)v.pause()});active=i;manualPause=false;
+ items.forEach((item,j)=>{item.setAttribute('aria-current',String(j===i))});
+ if(innerWidth<=800){const el=items[i];const rail=document.querySelector('.film-index');rail.scrollTo({left:el.offsetLeft-16,behavior:reduced?'instant':'smooth'})}
+ history.replaceState(null,'',`#${projects[i].id}`);
+ if(!reduced&&!document.hidden)videos[i].play().catch(()=>{});
+}
+function closest(){
+ scrollQueued=false;const top=innerWidth<=800?169:78;let best=0,dist=Infinity;
+ sections.forEach((s,i)=>{const r=s.getBoundingClientRect();const d=Math.abs(r.top-top);if(d<dist){dist=d;best=i}});activate(best);
+}
+function go(i){sections[i].scrollIntoView({behavior:reduced?'instant':'smooth',block:'start'})}
+items.forEach((item,i)=>item.addEventListener('click',()=>go(i)));
+sections.forEach((s,i)=>{
+ const v=videos[i],btn=s.querySelector('.play'),seek=s.querySelector('.seek'),time=s.querySelector('.time');
+ function toggle(){if(v.paused){manualPause=false;v.play().catch(()=>{})}else{manualPause=true;v.pause()}}
+ btn.addEventListener('click',toggle);v.addEventListener('click',toggle);
+ v.addEventListener('play',()=>{videos.forEach(other=>{if(other!==v)other.pause()});btn.innerHTML=pauseIcon;btn.setAttribute('aria-label',`Pause ${projects[i].title}`)});
+ v.addEventListener('pause',()=>{btn.innerHTML=playIcon;btn.setAttribute('aria-label',`Play ${projects[i].title}`)});
+ const update=()=>{time.textContent=`${fmt(v.currentTime)} / ${Number.isFinite(v.duration)?fmt(v.duration):'—'}`;seek.value=v.duration?Math.round(v.currentTime/v.duration*1000):0;items[i].style.setProperty('--progress',`${v.duration?v.currentTime/v.duration*100:0}%`)};
+ v.addEventListener('timeupdate',update);v.addEventListener('loadedmetadata',update);
+ seek.addEventListener('input',()=>{if(Number.isFinite(v.duration))v.currentTime=Number(seek.value)/1000*v.duration});
+ s.querySelector('.fullscreen').addEventListener('click',async()=>{try{if(document.fullscreenElement)await document.exitFullscreen();else if(s.querySelector('.stage').requestFullscreen)await s.querySelector('.stage').requestFullscreen();else if(v.webkitEnterFullscreen)v.webkitEnterFullscreen()}catch{v.setAttribute('controls','')}});
+ s.querySelector('.next').addEventListener('click',()=>go((i+1)%projects.length));
+ v.addEventListener('error',()=>{s.querySelector('.video-error').hidden=false});
+ s.querySelector('.retry').addEventListener('click',()=>{s.querySelector('.video-error').hidden=true;v.load();v.play().catch(()=>{})});
+});
+addEventListener('scroll',()=>{if(!scrollQueued){scrollQueued=true;requestAnimationFrame(closest)}},{passive:true});
+addEventListener('resize',closest);
+addEventListener('keydown',e=>{if(e.target.matches('input,button,a')||document.querySelector('dialog[open]'))return;if(e.code==='Space'){e.preventDefault();sections[active]?.querySelector('.play').click()}else if(e.key==='ArrowDown'||e.key==='PageDown'){e.preventDefault();go(Math.min(projects.length-1,active+1))}else if(e.key==='ArrowUp'||e.key==='PageUp'){e.preventDefault();go(Math.max(0,active-1))}});
+const track=document.querySelector('#soundtrack'),music=document.querySelector('#music-toggle'),musicLabel=document.querySelector('#music-label');track.volume=.22;
+let musicWanted=false;
+function musicState(on){music.setAttribute('aria-pressed',String(on));musicLabel.textContent=on?'Music on':'Music off';music.setAttribute('aria-label',on?'Turn background music off':'Turn background music on')}
+music.addEventListener('click',async()=>{if(!track.paused){musicWanted=false;track.pause();musicState(false)}else{try{await track.play();musicWanted=true;musicState(true)}catch{musicWanted=false;musicState(false);musicLabel.textContent='Music unavailable'}}});
+document.addEventListener('visibilitychange',()=>{if(document.hidden){videos.forEach(v=>v.pause());track.pause()}else{if(!manualPause&&!reduced)videos[active]?.play().catch(()=>{});if(musicWanted)track.play().catch(()=>{})}});
+const dialog=document.querySelector('#credits');document.querySelector('.music-credit').addEventListener('click',()=>dialog.showModal());document.querySelector('#close-credits').addEventListener('click',()=>dialog.close());dialog.addEventListener('click',e=>{if(e.target===dialog){const r=dialog.getBoundingClientRect();if(e.clientX<r.left||e.clientX>r.right||e.clientY<r.top||e.clientY>r.bottom)dialog.close()}});
+const initial=projects.findIndex(p=>`#${p.id}`===location.hash);if(initial>=0){sections[initial].scrollIntoView({behavior:'instant'});activate(initial)}else activate(0);
